@@ -12,7 +12,7 @@
 	<artifactId>insulin-pump</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>insulin-pump</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Safety Critical System for Diabetic patient - An Insulin Pump</description>
 
 	<properties>
 		<java.version>1.8</java.version>
