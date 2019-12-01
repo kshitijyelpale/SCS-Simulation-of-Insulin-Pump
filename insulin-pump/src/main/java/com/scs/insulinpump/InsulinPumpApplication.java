@@ -1,4 +1,4 @@
-package com.scs.insulinpump.insulinpump;
+package com.scs.insulinpump;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
