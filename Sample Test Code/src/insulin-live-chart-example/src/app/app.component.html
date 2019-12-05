@@ -1,0 +1,15 @@
+<!-- <div *ngIf= "chart">
+  <canvas id="canvas">{{ canvas }}</canvas>
+</div> -->
+
+<!-- <div *ngIf= "realtimeChart">
+  <canvas id="realtimeCanvas">{{ canvas }}</canvas>
+</div> -->
+
+<div>
+
+  <canvas baseChart [chartType]="'line'" [datasets]="datasets" [options]="options">
+
+  </canvas>
+
+</div>
