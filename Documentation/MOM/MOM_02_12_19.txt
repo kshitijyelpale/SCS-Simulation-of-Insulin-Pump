@@ -1,0 +1,10 @@
+MOM 02/12/2019
+
+Requirements and Use cases : Asad and Safir
+Software Engineering methods/ Tasks - Project Organisation and cost estimation and schedule for management review, Process Model and Safety standards: Faiz and Shubham
+GIT vs SVN/ JAVA vs C++/ integrating Matlab with C++/JAVA/ Other tech stack specs (like exact frameworks), Project architecture (after deciding process model) : Kshitij, Faiz and Shubham
+Classical Hazards Analysis : Safir and Asad
+Safety Plan : Safir to followup with Brian
+Project Plan : Combine everything
+Milestones : Kshitij
+Risks : ?
