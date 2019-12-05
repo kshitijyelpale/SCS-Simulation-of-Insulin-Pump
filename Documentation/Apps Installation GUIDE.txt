@@ -1,0 +1,49 @@
+Front End
+
+1)  Download Visual Studio Code
+	https://code.visualstudio.com/download#
+	Click on User Installer 64bit(if your system is 32 bit, use that) and install
+
+2)  Download Node JS 
+	https://nodejs.org/en/download/
+	Download Windows Installer 64 bit and install
+	
+	Verify in CMD/terminal after installation if node installed or not 
+	Commands : "node -v" and "npm -v"
+
+Use basic installation for both of the above app installtion. Use next next only 
+
+3)  Open project (here - insulin live chart example) in Visual Studio, open "TERMINAL" at bottom of Studio. The directory will be the project you selected. 
+
+4)  Install Angular 
+	Here installation of angular will be done by executing command "npm install -g @angular/cli" in VS terminal. Command taken from https://cli.angular.io/ 
+
+5)  Execute command 'npm install' - through it all the dependencies in 'package.json' will be installed.
+
+6)  Execute 'ng serve --open' to spin the node server which will run on localhost:4200 with live chart example. You will be automatically redirected to your default browser for localhost:4200.
+
+Congrats.....! Your charts are running :) :) 
+
+
+Back End
+
+1)  Download IntelliJ IDEA
+	https://www.jetbrains.com/idea/download/#section=windows
+	Download Community edition which is free (Ultimate is licensed) and install.
+	
+	OR 
+	
+	You can also use Eclipse or STS (Spring Tool Suite - Eclipse verison for Spring boot)
+	
+2)  Download and install JDK (Java)
+	https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html
+	At least install Java 8. 
+	
+3)  Set System variables 
+	path = your java directory till <jdk>/bin
+	JAVA_HOME = your java directory till <jdk>
+	
+4)  Open the project in IntelliJ. Open Maven at the right side of IDE, if Maven is not deteted automatically, click on "+ icon (Open Maven Projects)" and select project's pom.xml. It should download all the dependencies automatically, if not, doubclick on "install" under "lifecycle". 
+
+5)  Execute the main method or application, by that Tomcat server will spin up at port 8080. 
+
