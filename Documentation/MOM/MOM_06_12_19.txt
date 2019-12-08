@@ -1,0 +1,24 @@
+06/12/19 - Exercise Notes
+
+Apply classical hazard analysis and get the hazards, then apply STAMP
+Heirerchy is important
+Cyclical approach, find out hazards from current use case diagrams and then change use case, then 
+find requirements, do hazard analysis, come up with safety plan, come up with safety requirements and add to initial requirements
+
+Milestones : Project plan, UML diagrams, Hazard analysis, Safety plan, Process model, Mathematical model, Architecture design.`
+Pending tasks : Matlab is imp, play with that and present.
+Also present mathematical model in MATLAB
+
+MILESTONES TO COMPLETE THIS WEEK: 
+Project plan : All
+UML diagrams : Safir
+Hazard analysis and Safety plan : Faiz and Asad
+Process model: Kshitij and Shubham
+Architecture design: Kshitij and Faiz
+Requirements Tracebility matrix : Asad
+Domain Model : Kshitij
+Mathematical model: Shubham
+MATLAB : Voluntary
+Accidents : Voluntary
+
+*NOTE : Assignment submition Deadline : Wednesday 07:00 PM
