@@ -45,5 +45,16 @@ Back End
 	
 4)  Open the project in IntelliJ. Open Maven at the right side of IDE, if Maven is not deteted automatically, click on "+ icon (Open Maven Projects)" and select project's pom.xml. It should download all the dependencies automatically, if not, doubclick on "install" under "lifecycle". 
 
-5)  Execute the main method or application, by that Tomcat server will spin up at port 8080. 
+5)  Execute the main method or application, by that Tomcat server will spin up at port 8080.
 
+Database
+
+Install MySQL version 5.6 or higher
+
+After installation, execute following commands.
+
+mysql> create database insulinpump;
+mysql> create user 'springuser'@'%' identified by 'ThePassword';
+mysql> grant all on insulinpump.* to 'springuser'@'%';
+
+(Refer - https://spring.io/guides/gs/accessing-data-mysql/#scratch)
