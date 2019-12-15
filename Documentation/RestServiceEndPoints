@@ -1,0 +1,18 @@
+log entries patient
+GET - /patientlog/{patientID}
+
+insulin reservoir status of patient id 
+GET - /reservoir/insulin/{patientID}
+
+glucagon reservoir status of patient id 
+GET - /reservoir/glucagon/{patientID}
+
+BSL
+GET - /bsl/{patientID} 
+
+Register page - Store patrient info
+POST - /patient/create
+
+Login page - validate user
+POST - /patient/validate
+body - username and password (we need encryption here)

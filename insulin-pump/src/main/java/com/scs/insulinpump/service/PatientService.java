@@ -1,36 +1,56 @@
 package com.scs.insulinpump.service;
 
+import com.scs.insulinpump.dao.PatientRepository;
 import com.scs.insulinpump.domain.Patient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientService {
 
-    private Patient patient;
+    Logger logger = LoggerFactory.getLogger(PatientService.class);
+
+    @Autowired
+    public Patient patient;
     @Autowired
     private PatientLogService patientLogService;
+    @Autowired
+    private PatientRepository patientRepository;
 
-    public double calculateInsulinDosage(double bloodGlucoseLevel) {
 
-        double dosageAmount = 0;
-
-        //TODO: Algorithm to find insulin dosage
-
-        patientLogService.logInsulinInjection(patient, dosageAmount);
-
-        return dosageAmount;
+    public Iterable<Patient> getAllPatients() {
+        return patientRepository.findAll();
     }
 
 
-    public double calculateGlucagonDosage(double bloodGlucoseLevel) {
+    public Patient getPatientById(Integer patientId) {
+        Optional<Patient> patientOptional = patientRepository.findById(patientId);
 
-        double dosageAmount = 0;
+        return patientOptional.isPresent() ? patientOptional.get() : null;
+    }
 
-        //TODO: Algorithm to find glucagon dosage
 
-        patientLogService.logGlucagonInjection(patient, dosageAmount);
+    public Patient getPatientByUsername(String username) {
+        List<Patient> patients = patientRepository.findByUsername(username);
 
-        return dosageAmount;
+        return patients.isEmpty() ? null : patients.iterator().next();
+    }
+
+
+    public void storePatient(Patient patient) {
+        patientRepository.save(patient);
+    }
+
+
+    public Boolean validatePatient(String username, String password) {
+
+        List<Patient> patients = patientRepository.findByUsernameAndPassword(username, password);
+
+        return patients.isEmpty();
     }
 }

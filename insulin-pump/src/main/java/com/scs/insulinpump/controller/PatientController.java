@@ -1,13 +1,11 @@
 package com.scs.insulinpump.controller;
 
-import com.scs.insulinpump.dao.PatientRepository;
 import com.scs.insulinpump.domain.Patient;
+import com.scs.insulinpump.service.PatientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 
 @RestController
@@ -17,20 +15,29 @@ public class PatientController {
     private static Logger logger = LoggerFactory.getLogger(PatientController.class);
 
     @Autowired
-    private PatientRepository patientRepository;
+    private PatientService patientService;
 
     @PostMapping(path = "/create")
     public @ResponseBody String addPatient (@RequestBody Patient patient) {
         logger.info(patient.toString());
-        patientRepository.save(patient);
+        patientService.storePatient(patient);
 
         return "Saved.";
     }
 
 
+    @PostMapping(value = "/validate")
+    public Boolean validatePatient(@RequestBody Patient patient) {
+
+        if (patient.getUsername().isEmpty() || patient.getPassword().isEmpty()) return false;
+
+        return patientService.validatePatient(patient.getUsername(), patient.getPassword());
+    }
+
+
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<Patient> getAllPatients() {
-        return patientRepository.findAll();
+        return patientService.getAllPatients();
     }
 
 
@@ -39,19 +46,15 @@ public class PatientController {
         logger.info("Patient Id: " + patientId);
         if(patientId == null) return null;
 
-        Optional<Patient> patientOptional = patientRepository.findById(patientId);
-        return patientOptional.isPresent() ? patientOptional.get() : null;
+        return patientService.getPatientById(patientId);
     }
 
 
-    /*@GetMapping(path = "/username/{username}")
-    public @ResponseBody Patient getPatientByName(@PathVariable String username) {
+    @GetMapping(path = "/username/{username}")
+    public @ResponseBody Patient getPatientByUsername(@PathVariable String username) {
         logger.info("Patient's Username: " + username);
         if(username == null) return null;
 
-        Optional<Patient> patientOptional = patientRepository.findByName(username);
-        return patientOptional.isPresent() ? patientOptional.get() : null;
-    }*/
-
-
+        return patientService.getPatientByUsername(username);
+    }
 }
