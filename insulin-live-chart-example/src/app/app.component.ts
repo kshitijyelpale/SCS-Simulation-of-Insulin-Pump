@@ -226,11 +226,13 @@ export class AppComponent {
 
     label: 'Dataset 1',
 
-    lineTension: 0,
+    //lineTension: 0,
 
-    borderDash: [8, 4]
+    //borderDash: [8, 4],
 
-  }, {
+    fill: false
+
+  }/*, {
 
     data: [],
 
@@ -242,7 +244,7 @@ export class AppComponent {
 
     label: 'Dataset 3'
 
-  }
+  }*/
 
 ];
 
@@ -264,7 +266,7 @@ export class AppComponent {
 
                 x: Date.now(),
 
-                y: Math.random()
+                y: Math.floor(Math.random() * (200 - 100 + 1)) + 100
 
               });
 
