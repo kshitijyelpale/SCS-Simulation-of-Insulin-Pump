@@ -12,6 +12,17 @@ GET - /bsl/{patientID}
 
 Register page - Store patrient info
 POST - /patient/create
+body - all user information data in the json like
+{
+	"firstname":"abcd",
+	"lastname": "efgh",
+	"username":"abc",
+	"email":"abc123@xyz.com",
+	"password":"123",
+	"birthdate":"1993-11-28",
+	"contacts":"abc@gmail.com,xyz@gmail.com"
+} 
+
 
 Login page - validate user
 POST - /patient/validate
