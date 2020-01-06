@@ -1,15 +1,11 @@
-<!-- <div *ngIf= "chart">
-  <canvas id="canvas">{{ canvas }}</canvas>
-</div> -->
-
-<!-- <div *ngIf= "realtimeChart">
-  <canvas id="realtimeCanvas">{{ canvas }}</canvas>
-</div> -->
-
-<div>
-
-  <canvas baseChart [chartType]="'line'" [datasets]="datasets" [options]="options">
-
-  </canvas>
-
+﻿<!-- main app container -->
+<div class="jumbotron">
+    <div class="container">
+        <div class="col-sm-8 col-sm-offset-2">
+            <alert></alert>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
 </div>
+
+<!-- credits -->
