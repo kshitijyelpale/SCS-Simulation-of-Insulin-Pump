@@ -18,18 +18,18 @@ public class PatientController {
     private PatientService patientService;
 
     @PostMapping(path = "/create")
-    public @ResponseBody String addPatient (@RequestBody Patient patient) {
+    public @ResponseBody Integer addPatient (@RequestBody Patient patient) {
         logger.info(patient.toString());
-        patientService.storePatient(patient);
+        Integer storedPatientID = patientService.storePatient(patient);
 
-        return "Saved.";
+        return storedPatientID;
     }
 
 
     @PostMapping(value = "/validate")
-    public Boolean validatePatient(@RequestBody Patient patient) {
-
-        if (patient.getUsername().isEmpty() || patient.getPassword().isEmpty()) return false;
+    public @ResponseBody Integer validatePatient(@RequestBody Patient patient) {
+        logger.info(patient.toString());
+        if (patient.getUsername().isEmpty() || patient.getPassword().isEmpty()) return 0;
 
         return patientService.validatePatient(patient.getUsername(), patient.getPassword());
     }

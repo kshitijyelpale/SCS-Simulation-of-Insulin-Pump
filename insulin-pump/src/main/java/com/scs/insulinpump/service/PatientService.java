@@ -42,15 +42,23 @@ public class PatientService {
     }
 
 
-    public void storePatient(Patient patient) {
-        patientRepository.save(patient);
+    public Integer storePatient(Patient patient) {
+        logger.info(patient.toString());
+        Patient patient1 = patientRepository.save(patient);
+
+        return patient1.getPatientId();
     }
 
 
-    public Boolean validatePatient(String username, String password) {
-
+    public Integer validatePatient(String username, String password) {
+        logger.info("Username: " + username + " and password: " + password);
         List<Patient> patients = patientRepository.findByUsernameAndPassword(username, password);
+        if (!patients.isEmpty()) {
+            Patient patient = patients.get(0);
 
-        return patients.isEmpty();
+            return patient.getPatientId();
+        }
+
+        return 0;
     }
 }

@@ -1,5 +1,7 @@
 package com.scs.insulinpump.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.Past;
 import java.util.Date;
@@ -27,6 +29,7 @@ public class Patient {
     private String contactList;
 
     @Past
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthdate;
 
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
