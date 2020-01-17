@@ -1,0 +1,4 @@
+architecture diagram, Safety plan - Safir
+Stamp, hazard analysis - Asad
+UI prototype - Faiz
+Backend and mathematical model - Kshitij and Shubham
