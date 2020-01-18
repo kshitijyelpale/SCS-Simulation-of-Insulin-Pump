@@ -72,8 +72,10 @@ spring:
   mail:
      host: smtp.gmail.com
      port: 587
-     username: insulinglucagonpump2020@gmail.com  #Replace this field with your Gmail username.
-     password: insulinglucagon          #Replace this field with your Gmail password/App password.
+     # The gmail account from which the email is sent to user
+     username: insulinglucagonpump2020@gmail.com
+     # password for the above account
+     password: insulinglucagon
      protocol: smtp
      tls: true
      properties.mail.smtp:
