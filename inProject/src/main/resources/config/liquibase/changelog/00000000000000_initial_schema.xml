@@ -149,4 +149,12 @@
             <column name="local_date" type="date"/>
         </createTable>
     </changeSet>
+
+    <changeSet author="jhipster" id="00000000000003" runOnChange="true">
+        <addColumn tableName="jhi_user">
+            <column name="contacts" type="varchar(250)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

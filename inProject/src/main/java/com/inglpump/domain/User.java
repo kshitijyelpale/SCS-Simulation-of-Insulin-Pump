@@ -93,6 +93,18 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
+    @Size(max = 250)
+    @Column(name = "contacts", length = 250, nullable = true)
+    private String emergencyContacts;
+
+    public void setEmergencyContacts(String emergencyContacts) {
+        this.emergencyContacts = emergencyContacts;
+    }
+
+    public String getEmergencyContacts() {
+        return emergencyContacts;
+    }
+
     public Long getId() {
         return id;
     }
