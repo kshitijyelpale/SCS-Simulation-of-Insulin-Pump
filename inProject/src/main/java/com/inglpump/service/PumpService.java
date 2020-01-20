@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 import com.inglpump.config.Constants;
 import com.inglpump.domain.Bsl;
 import com.inglpump.domain.User;
+import com.inglpump.web.rest.UserResource;
 
 @Service
 public class PumpService {
 
-	Logger logger = LoggerFactory.getLogger(PumpService.class);
+	private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
 	@Autowired
 	private User user;
@@ -115,6 +116,7 @@ public class PumpService {
         bsl = userJsonMap.get(userId);
 
         if (newActivity) {
+        	log.info("inside if (new activity), carbs: " + carbs);
             bsl.setCarbohydrates(carbs);
             bsl.setTimeCounter(0);
         }
