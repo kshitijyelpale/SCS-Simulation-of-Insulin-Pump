@@ -29,6 +29,9 @@ public class PumpService {
 
 //	private static BSLCalculation BSLCalculation = null;
 
+
+    //================================== public methods ================================================================
+
 	public double calculateInsulinDosage(double bloodGlucoseLevel) {
 
 		double dosageAmount = 0;
@@ -52,68 +55,112 @@ public class PumpService {
 	}
 
 	public Bsl getBSL(Integer userId) {
+        if ((userJsonMap.get(userId) == null)) {
+            bsl = new Bsl();
+            bsl.setUserId(userId);
+            bsl.setPreviousBsl(90);
+            bsl.setCurrentBsl(90);
+            bsl.setTimeCounter(0);
+            userJsonMap.put(userId, bsl);
 
-		if ((userJsonMap.get(userId) == null)) {
-
-			bsl = new Bsl();
-			bsl.setUserId(userId);
-			bsl.setPreviousBsl(90);
-			bsl.setCurrentBsl(90);
-			bsl.setTimeCounter(1);
-
-			userJsonMap.put(userId, bsl);
-
-			return bsl;
-		}
+            return bsl;
+        }
 
 		bsl = userJsonMap.get(userId);
 		double currentBsl = bsl.getCurrentBsl();
-		double calculatedBsl;
+		double calculatedBsl = 0;
 		String message = null;
 
-		if (currentBsl > 120) {
+        if (currentBsl > 120) {
+            // case: BSL > 120
+            calculatedBsl = calculateBslForHyperGlycemia(currentBsl);
+            Double insulinDosageValue = getInsulinDosageValue(currentBsl);
+            message = "After " + insulinDosageValue + " of insulin injection, BSL decreased from " + currentBsl + " " +
+                " to " + calculatedBsl + "mg/dL";
 
-			// case: BSL > 120
-			calculatedBsl = calculateBslForHyperGlycemia(currentBsl);
-			Double insulinDosageValue = getInsulinDosageValue(currentBsl);
-			message = "After " + insulinDosageValue + " of insulin injection, BSL decreased from " + currentBsl + " to " + calculatedBsl + "mg/dl";
+            bsl.setInjectionStarted(true);
 
-		} else if (currentBsl < 70) {
+        } else if (currentBsl < 70) {
+            // case: BSL < 70
+            calculatedBsl = calculateBslForHypoGlycemia(currentBsl);
+            Double glucagonDosageValue = getGlucagonDosageValue(currentBsl);
+            message = "After " + glucagonDosageValue + " of glucagon injection, BSL increased from " + currentBsl +
+                " to " + calculatedBsl + "mg/dL";
 
-			// case: BSL < 70
-			calculatedBsl = calculateBslForHypoGlycemia(currentBsl);
-			Double glucagonDosageValue = getGlucagonDosageValue(currentBsl);
-			message = "After " + glucagonDosageValue + " of glucagon injection, BSL increased from " + currentBsl + " to " + calculatedBsl + "mg/dl";
+            bsl.setInjectionStarted(true);
 
-		} else {
+        } else if (currentBsl < 120 && bsl.isInjectionStarted()) {
+            // case: 70 < BSL < 120
+            calculatedBsl = calculateBslforIdeal(currentBsl);
+        }
+        else {
+            getBslForCarbo(userId, bsl.getCarbohydrates(), false);
+        }
 
-			// case: 70 < BSL < 120
-			calculatedBsl = calculateBslforIdeal(currentBsl);
+        if (calculatedBsl != 0) {
+            bsl.setPreviousBsl(currentBsl);
+            bsl.setCurrentBsl(calculatedBsl);
+            int timeCounter = bsl.getTimeCounter();
+            bsl.setTimeCounter(++timeCounter);
+            bsl.setMessage(message);
+            userJsonMap.put(userId, bsl);
+        }
 
-		}
-		bsl.setPreviousBsl(currentBsl);
-		bsl.setCurrentBsl(calculatedBsl);
-		int timeCounter = bsl.getTimeCounter();
-		bsl.setTimeCounter(++timeCounter);
-		bsl.setMessage(message);
-		userJsonMap.put(userId, bsl);
 
 		return bsl;
 	}
 
-	private double calculateBslforIdeal(double currentBsl) {
 
+    public Bsl getBslForCarbo(Integer userId, double carbs, boolean newActivity) {
+        bsl = userJsonMap.get(userId);
+
+        if (newActivity) {
+            bsl.setCarbohydrates(carbs);
+            bsl.setTimeCounter(0);
+        }
+
+        double currentBsl = bsl.getCurrentBsl();
+        double calculatedBsl = bslAfterActivity(currentBsl, carbs, bsl.getTimeCounter());
+        if (calculatedBsl != 0) {
+            bsl.setPreviousBsl(currentBsl);
+            bsl.setCurrentBsl(calculatedBsl);
+            int timeCounter = bsl.getTimeCounter();
+            bsl.setTimeCounter(++timeCounter);
+            userJsonMap.put(userId, bsl);
+        }
+
+        return bsl;
+    }
+
+
+	//================================== private methods ===============================================================
+
+
+    private double bslAfterActivity(double currentBsl, double carbs, int tCounter) {
+	    double bsl = 0;
+        if (carbs != 0) {
+            bsl =
+                currentBsl
+              + (2 * carbs * (Constants.k1 / (Constants.k2 - Constants.k1))
+                    * (Math.exp(-Constants.k1 * Constants.TIME_INTERVAL * tCounter)
+                        - Math.exp(-Constants.k2 * Constants.TIME_INTERVAL * tCounter)
+                    )
+                );
+        }
+
+	    return bsl;
+    }
+
+
+    private double calculateBslforIdeal(double currentBsl) {
 		// Logic for ideal case
-
 		currentBsl -= (3 * (Constants.k1 / (Constants.k2 - Constants.k1))
 				* (Math.exp(-Constants.k1 * 5) - Math.exp(-Constants.k2 * 5)));
 
 		return currentBsl;
-
 	}
 
 	private double calculateBslForHypoGlycemia(double currentBsl) {
-
 		// Logic for HypoGlycemia
 		Double glucagonDosageValue = getGlucagonDosageValue(currentBsl);
 //		if (glucagonDosageValue < 0)
@@ -125,7 +172,6 @@ public class PumpService {
 	}
 
 	private double calculateBslForHyperGlycemia(double currentBsl) {
-
 		// Logic for HyperGlycemia
 		Double insulinDosageValue = getInsulinDosageValue(currentBsl);
 		if (insulinDosageValue > 0) {
@@ -135,7 +181,7 @@ public class PumpService {
 		return currentBsl;
 	}
 
-	public static Double getInsulinDosageValue(double currentBSL) {
+	private static Double getInsulinDosageValue(double currentBSL) {
 		double calculatedinsulindose = 0;
 		if (currentBSL >= Constants.MaximumBloodSugarLevel) {
 			double insulinCorrectionFactor = (getChangeInBSForInsulin(currentBSL)) / Constants.ISF;
@@ -168,7 +214,7 @@ public class PumpService {
 		return 6;
 	}
 
-	public static Double getGlucagonDosageValue(double currentBSL) {
+	private static Double getGlucagonDosageValue(double currentBSL) {
 		double calculatedGlucagondose = 0;
 		if (currentBSL < Constants.MinimumBloodSugarLevel) {
 			calculatedGlucagondose = getChangeInBSForGlucagon(currentBSL) / 3;

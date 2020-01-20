@@ -28,6 +28,7 @@ public final class Constants {
 	
 	public static double k1 = 0.0453;	// Glycemic index
 	public static double k2 = 0.0224;	// insulin injection rate
+    public static int TIME_INTERVAL = 3;
 
     private Constants() {
     }

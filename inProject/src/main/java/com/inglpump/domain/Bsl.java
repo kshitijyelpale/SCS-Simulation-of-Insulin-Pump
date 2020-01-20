@@ -7,8 +7,10 @@ public class Bsl {
 	private double previousBsl;
 	private double currentBsl;
 	private String message;
+	private boolean injectionStarted;
+	private double carbohydrates;
 
-	public int getUserId() {
+    public int getUserId() {
 		return userId;
 	}
 
@@ -47,6 +49,22 @@ public class Bsl {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+    public boolean isInjectionStarted() {
+        return injectionStarted;
+    }
+
+    public double getCarbohydrates() {
+        return carbohydrates;
+    }
+
+    public void setCarbohydrates(double carbohydrates) {
+        this.carbohydrates = carbohydrates;
+    }
+
+    public void setInjectionStarted(boolean injectionStarted) {
+        this.injectionStarted = injectionStarted;
+    }
 
 	@Override
 	public String toString() {
