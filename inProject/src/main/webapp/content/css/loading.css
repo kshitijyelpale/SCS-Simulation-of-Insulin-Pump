@@ -1,3 +1,11 @@
+body{
+  overflow: hidden;
+}
+
+.jh-card {
+   padding-bottom: 0px !important;
+}
+
 @keyframes lds-pacman-1 {
   0% {
     -webkit-transform: rotate(0deg);
@@ -149,4 +157,75 @@
 .app-loading .lds-pacman > div:nth-child(1) div:nth-child(3) {
   -webkit-animation-delay: 0s;
   animation-delay: 0s;
+}
+
+
+.loader {
+  --size: 140px;
+  --speed: 5s;
+}
+
+.loader {
+  width: var(--size);
+  height: var(--size);
+  position: absolute;
+  top: 200px; 
+  left: 600px;
+  
+}
+
+.loader__logo {
+  position: absolute;
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background-image: url('../images/logo.png');
+  background-size: contain;
+  animation: scale var(--speed) linear infinite;
+}
+
+.loader__inner {
+  position: absolute;
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  box-shadow: 
+    0 -10px 0 0 rgba(0,77,64, .6),
+    -7.5px 5px 0 0 rgba(0,121,107, .6),
+    7.5px 5px 0 0 rgba(0,150,136, .6);
+  animation: rotate var(--speed) linear infinite;
+}
+.loader__inner:nth-child(2) {
+  box-shadow: 
+    7.5px -5px 0 0 rgba(49,27,146, .6),
+    -7.5px -5px 0 0 rgba(81,45,168, .6),
+    0 10px 0 0 rgba(103,58,183, .6);
+  animation: rotate__other var(--speed) linear infinite;
+}
+@keyframes scale {
+  50% {
+    transform: scale(1.2) ;
+  }
+  100% {
+    transform: scale(1) ;
+  }
+}
+@keyframes rotate {
+  50% {
+    transform: scale(1.4) rotate(360deg);
+  }
+  100% {
+    transform: scale(1) rotate(720deg);
+  }
+}
+
+@keyframes rotate__other {
+  50% {
+    transform: scale(1.5) rotate(-360deg);
+  }
+  100% {
+    transform: scale(1) rotate(-720deg);
+  }
 }

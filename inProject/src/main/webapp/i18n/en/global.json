@@ -54,7 +54,8 @@
         },
         "register": {
           "noaccount": "You don't have an account yet?",
-          "link": "Register a new account"
+          "link": "Register a new account",
+          "signin": "Please click on the link to login : "
         }
       },
       "error": {
