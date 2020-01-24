@@ -56,86 +56,117 @@ public class PumpService {
 	}
 
 	public Bsl getBSL(Integer userId) {
-        if ((userJsonMap.get(userId) == null)) {
-            bsl = new Bsl();
-            bsl.setUserId(userId);
-            bsl.setPreviousBsl(90);
-            bsl.setCurrentBsl(90);
-            bsl.setTimeCounter(0);
-            userJsonMap.put(userId, bsl);
+        try {
+            if ((userJsonMap.get(userId) == null)) {
+                return initializeBsl(userId);
+            }
+
+            bsl = userJsonMap.get(userId);
+            double currentBsl = bsl.getCurrentBsl();
+            double calculatedBsl = 0;
+            String message = null;
+
+            if (currentBsl > 120) {
+                log.debug("In range of hyper");
+                // case: BSL > 120
+                calculatedBsl = calculateBslForHyperGlycemia(currentBsl);
+                Double insulinDosageValue = getInsulinDosageValue(currentBsl);
+                message = "After " + insulinDosageValue + " of insulin injection, BSL decreased from " + currentBsl + " " +
+                    " to " + calculatedBsl + "mg/dL";
+
+                bsl.setInjectionStarted(true);
+
+                log.debug("New value of BSL calculated when in hyper range. New current BSL value: " + calculatedBsl);
+            } else if (currentBsl < 70) {
+                log.debug("In range of hypo");
+                // case: BSL < 70
+                calculatedBsl = calculateBslForHypoGlycemia(currentBsl);
+                Double glucagonDosageValue = getGlucagonDosageValue(currentBsl);
+                message = "After " + glucagonDosageValue + " of glucagon injection, BSL increased from " + currentBsl +
+                    " to " + calculatedBsl + "mg/dL";
+
+                bsl.setInjectionStarted(true);
+                log.debug("New value of BSL calculated when in hypo range. New current BSL value: " + calculatedBsl);
+
+            } else if (currentBsl < 120 && bsl.isInjectionStarted()) {
+                log.debug("In normal range ");
+                // case: 70 < BSL < 120
+                calculatedBsl = calculateBslforIdeal(currentBsl);
+
+                log.debug("New BSL calculated considering metabolic rate. New current BSL value: " + calculatedBsl);
+            }
+            else {
+                log.debug("Injection is not yet started. Calculating BSL by considering carbohydrates.");
+                return getBslForCarbo(userId, bsl.getCarbohydrates(), false);
+            }
+
+            if (calculatedBsl != 0) {
+                bsl.setPreviousBsl(currentBsl);
+                bsl.setCurrentBsl(calculatedBsl);
+                int timeCounter = bsl.getTimeCounter();
+                bsl.setTimeCounter(++timeCounter);
+                bsl.setMessage(message);
+                userJsonMap.put(userId, bsl);
+            }
 
             return bsl;
+        } catch (Exception e) {
+            log.error("Error in calculation of BSL");
+            log.error(e.getMessage());
+
+            return null;
         }
-
-		bsl = userJsonMap.get(userId);
-		double currentBsl = bsl.getCurrentBsl();
-		double calculatedBsl = 0;
-		String message = null;
-
-        if (currentBsl > 120) {
-            // case: BSL > 120
-            calculatedBsl = calculateBslForHyperGlycemia(currentBsl);
-            Double insulinDosageValue = getInsulinDosageValue(currentBsl);
-            message = "After " + insulinDosageValue + " of insulin injection, BSL decreased from " + currentBsl + " " +
-                " to " + calculatedBsl + "mg/dL";
-
-            bsl.setInjectionStarted(true);
-
-        } else if (currentBsl < 70) {
-            // case: BSL < 70
-            calculatedBsl = calculateBslForHypoGlycemia(currentBsl);
-            Double glucagonDosageValue = getGlucagonDosageValue(currentBsl);
-            message = "After " + glucagonDosageValue + " of glucagon injection, BSL increased from " + currentBsl +
-                " to " + calculatedBsl + "mg/dL";
-
-            bsl.setInjectionStarted(true);
-
-        } else if (currentBsl < 120 && bsl.isInjectionStarted()) {
-            // case: 70 < BSL < 120
-            calculatedBsl = calculateBslforIdeal(currentBsl);
-        }
-        else {
-            getBslForCarbo(userId, bsl.getCarbohydrates(), false);
-        }
-
-        if (calculatedBsl != 0) {
-            bsl.setPreviousBsl(currentBsl);
-            bsl.setCurrentBsl(calculatedBsl);
-            int timeCounter = bsl.getTimeCounter();
-            bsl.setTimeCounter(++timeCounter);
-            bsl.setMessage(message);
-            userJsonMap.put(userId, bsl);
-        }
-
-
-		return bsl;
-	}
+    }
 
 
     public Bsl getBslForCarbo(Integer userId, double carbs, boolean newActivity) {
-        bsl = userJsonMap.get(userId);
+        try {
+            if ((userJsonMap.get(userId) == null)) {
+                bsl = initializeBsl(userId);
+            } else {
+                bsl = userJsonMap.get(userId);
+            }
+            if (newActivity) {
+                bsl.setCarbohydrates(carbs);
+                bsl.setTimeCounter(0);
 
-        if (newActivity) {
-        	log.info("inside if (new activity), carbs: " + carbs);
-            bsl.setCarbohydrates(carbs);
-            bsl.setTimeCounter(0);
+                log.info("New activity - values of carbohydrates and time counter reset");
+                log.debug("New activity - values of carbohydrates and time counter reset");
+            }
+
+            double currentBsl = bsl.getCurrentBsl();
+            double calculatedBsl = bslAfterActivity(currentBsl, carbs, bsl.getTimeCounter());
+            if (calculatedBsl != 0) {
+                bsl.setPreviousBsl(currentBsl);
+                bsl.setCurrentBsl(calculatedBsl);
+                int timeCounter = bsl.getTimeCounter();
+                bsl.setTimeCounter(++timeCounter);
+                userJsonMap.put(userId, bsl);
+            }
+
+            return bsl;
+        } catch (Exception e) {
+            log.error("Error in calculation of BSL when carbohydrates as input");
+            log.error(e.getMessage());
+
+            return null;
         }
-
-        double currentBsl = bsl.getCurrentBsl();
-        double calculatedBsl = bslAfterActivity(currentBsl, carbs, bsl.getTimeCounter());
-        if (calculatedBsl != 0) {
-            bsl.setPreviousBsl(currentBsl);
-            bsl.setCurrentBsl(calculatedBsl);
-            int timeCounter = bsl.getTimeCounter();
-            bsl.setTimeCounter(++timeCounter);
-            userJsonMap.put(userId, bsl);
-        }
-
-        return bsl;
     }
 
 
 	//================================== private methods ===============================================================
+
+
+    private Bsl initializeBsl(Integer userId) {
+        bsl = new Bsl();
+        bsl.setUserId(userId);
+        bsl.setPreviousBsl(90);
+        bsl.setCurrentBsl(90);
+        bsl.setTimeCounter(0);
+        userJsonMap.put(userId, bsl);
+
+        return bsl;
+    }
 
 
     private double bslAfterActivity(double currentBsl, double carbs, int tCounter) {
@@ -225,4 +256,5 @@ public class PumpService {
 
 		return calculatedGlucagondose;
 	}
+
 }
