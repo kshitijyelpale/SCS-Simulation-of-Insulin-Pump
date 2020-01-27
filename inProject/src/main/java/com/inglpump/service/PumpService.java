@@ -24,6 +24,8 @@ public class PumpService {
 	private UserService userService;
 	@Autowired
 	private UserLogService userLogService;
+	@Autowired
+    private MailService mailService;
 
 	private static HashMap<Integer, Bsl> userJsonMap = new HashMap<Integer, Bsl>();
 	private Bsl bsl;
@@ -55,7 +57,12 @@ public class PumpService {
 		return dosageAmount;
 	}
 
-	public Bsl getBSL(Integer userId) {
+
+    public User getUser(Integer userid) {
+        return userService.getUser(userid);
+    }
+
+    public Bsl getBSL(Integer userId) {
         try {
             if ((userJsonMap.get(userId) == null)) {
                 return initializeBsl(userId);
@@ -256,5 +263,12 @@ public class PumpService {
 
 		return calculatedGlucagondose;
 	}
+
+
+	private void sendEMail(Integer userId) {
+        User user = userService.getUser(userId);
+        String conatcts = user.getEmergencyContacts();
+	    mailService.sendEmail(conatcts, "","", false, false);
+    }
 
 }
