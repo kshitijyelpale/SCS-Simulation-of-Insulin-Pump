@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-
+//import { DOCUMENT } from '@angular/common'; 
 import { LoginModalService } from 'app/core/login/login-modal.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import 'chartjs-plugin-streaming';
 import 'chartjs-plugin-annotation';
+import * as $ from 'jquery';
+
 
 
 @Component({
@@ -16,7 +18,8 @@ import 'chartjs-plugin-annotation';
 export class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;
   authSubscription?: Subscription;
-  //batterybar: any;
+  //batterybar: HTMLElement;
+  batteryDiv?: HTMLElement;
 
   datasets: any[] = [{
 
@@ -44,7 +47,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }*/
 
-];
+  ];
 
   options: any = {
 
@@ -56,7 +59,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         realtime: {
 
-          onRefresh (chart: any) {
+          onRefresh(chart: any) {
 
             chart.data.datasets.forEach(function (dataset: any) {
 
@@ -70,9 +73,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
             });
             chart.config.options.scales.yAxes[0].ticks.min =
-            chart.helpers.niceNum(20);
-        chart.config.options.scales.yAxes[0].ticks.max =
-            chart.helpers.niceNum(180);
+              chart.helpers.niceNum(20);
+            chart.config.options.scales.yAxes[0].ticks.max =
+              chart.helpers.niceNum(180);
           },
 
           delay: 2000
@@ -81,15 +84,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       }]
 
-    }, 
+    },
     annotation: {
       annotations: [{
-          type: 'line',
-          mode: 'horizontal',
-          scaleID: 'y-axis-0',
-          value: '150',
-          borderColor: 'tomato',
-          borderWidth: 2
+        type: 'line',
+        mode: 'horizontal',
+        scaleID: 'y-axis-0',
+        value: '150',
+        borderColor: 'tomato',
+        borderWidth: 2
       },
       {
         type: 'line',
@@ -98,15 +101,20 @@ export class HomeComponent implements OnInit, OnDestroy {
         value: '90',
         borderColor: 'blue',
         borderWidth: 2
-    }],
+      }],
       //drawTime: "afterDraw" // (default)
-  }};
+    }
+  };
 
-  constructor(private accountService: AccountService, private loginModalService: LoginModalService) {}
+  constructor(private accountService: AccountService, private loginModalService: LoginModalService) {
+    // this.batterybar = document.getElementById("batterybar");
+    // console.log("width",this.batterybar);
+
+  }
 
   ngOnInit(): void {
     this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
-  
+
     //this.batterybar = document.getElementById("batterybar")?.offsetWidth;
     //console.log("width",this.batterybar);
   }
@@ -119,11 +127,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loginModalService.open();
   }
 
+  drainbattery(): void {
+    this.batteryDiv = document.getElementById('batterybar');
+    console.log("Battery", this.batteryDiv);
+    
+    setTimeout(function () {
+      $("#batterybar").css("width", "50" + "%")
+    }, 3000)
+  }
+
   ngOnDestroy(): void {
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
     }
   }
 
-  
+
 }

@@ -2,4 +2,5 @@
 import 'chart.js/dist/Chart.js';
 import 'chartjs-plugin-streaming/dist/chartjs-plugin-streaming.js';
 import '../content/scss/vendor.scss';
+import 'jquery/dist/jquery.min.js';
 
