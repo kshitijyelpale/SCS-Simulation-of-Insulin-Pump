@@ -297,6 +297,13 @@ public class UserService {
     }
 
 
+    public User getUser(long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        return userOptional.isPresent() ? userOptional.get() : null;
+    }
+
+
     private void clearUserCaches(User user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         if (user.getEmail() != null) {

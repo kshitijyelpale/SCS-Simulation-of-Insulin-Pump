@@ -1,14 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-//import { DOCUMENT } from '@angular/common'; 
+import { Subscription, Observable } from 'rxjs';
+
 import { LoginModalService } from 'app/core/login/login-modal.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import 'chartjs-plugin-streaming';
 import 'chartjs-plugin-annotation';
-import * as $ from 'jquery';
-
-
+import { AuthServerProvider } from '../core/auth/auth-jwt.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Bsl } from './bsl';
+import { SERVER_API_URL } from '../app.constants';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-home',
@@ -18,22 +20,20 @@ import * as $ from 'jquery';
 export class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;
   authSubscription?: Subscription;
-  //batterybar: HTMLElement;
-  batteryDiv?: HTMLElement;
+  //batterybar: any;
 
-  datasets: any[] = [{
+  datasets: any[] = [
+    {
+      data: [],
 
-    data: [],
+      label: 'Blood Sugar level',
 
-    label: 'Blood Sugar level',
+      //lineTension: 0,
 
-    //lineTension: 0,
+      //borderDash: [8, 4],
 
-    //borderDash: [8, 4],
-
-    fill: false
-
-  }/*, {
+      fill: false
+    } /*, {
 
     data: [],
 
@@ -46,71 +46,62 @@ export class HomeComponent implements OnInit, OnDestroy {
     label: 'Dataset 3'
 
   }*/
-
   ];
 
   options: any = {
-
     scales: {
+      xAxes: [
+        {
+          type: 'realtime',
 
-      xAxes: [{
+          realtime: {
+            onRefresh(chart: any) {
+              chart.data.datasets.forEach(function(dataset: any) {
+                dataset.data.push({
+                  x: Date.now(),
 
-        type: 'realtime',
-
-        realtime: {
-
-          onRefresh(chart: any) {
-
-            chart.data.datasets.forEach(function (dataset: any) {
-
-              dataset.data.push({
-
-                x: Date.now(),
-
-                y: Math.floor(Math.random() * (200 - 100 + 1)) + 100
-
+                  y: Math.floor(Math.random() * (200 - 60 + 1)) + 100
+                });
               });
+              chart.config.options.scales.yAxes[0].ticks.min = chart.helpers.niceNum(20);
+              chart.config.options.scales.yAxes[0].ticks.max = chart.helpers.niceNum(180);
+            },
 
-            });
-            chart.config.options.scales.yAxes[0].ticks.min =
-              chart.helpers.niceNum(20);
-            chart.config.options.scales.yAxes[0].ticks.max =
-              chart.helpers.niceNum(180);
-          },
-
-          delay: 2000
-
+            delay: 2000
+          }
         }
-
-      }]
-
+      ]
     },
     annotation: {
-      annotations: [{
-        type: 'line',
-        mode: 'horizontal',
-        scaleID: 'y-axis-0',
-        value: '150',
-        borderColor: 'tomato',
-        borderWidth: 2
-      },
-      {
-        type: 'line',
-        mode: 'horizontal',
-        scaleID: 'y-axis-0',
-        value: '90',
-        borderColor: 'blue',
-        borderWidth: 2
-      }],
+      annotations: [
+        {
+          type: 'line',
+          mode: 'horizontal',
+          scaleID: 'y-axis-0',
+          value: '120',
+          borderColor: 'tomato',
+          borderWidth: 2
+        },
+        {
+          type: 'line',
+          mode: 'horizontal',
+          scaleID: 'y-axis-0',
+          value: '70',
+          borderColor: 'blue',
+          borderWidth: 2
+        }
+      ]
       //drawTime: "afterDraw" // (default)
     }
   };
 
-  constructor(private accountService: AccountService, private loginModalService: LoginModalService) {
-    // this.batterybar = document.getElementById("batterybar");
-    // console.log("width",this.batterybar);
-
-  }
+  constructor(
+    private accountService: AccountService,
+    private loginModalService: LoginModalService,
+    private authServer: AuthServerProvider,
+    private http: HttpClient,
+    private bsl: Bsl
+  ) {}
 
   ngOnInit(): void {
     this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
@@ -127,20 +118,28 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loginModalService.open();
   }
 
-  drainbattery(): void {
-    this.batteryDiv = document.getElementById('batterybar');
-    console.log("Battery", this.batteryDiv);
-    
-    setTimeout(function () {
-      $("#batterybar").css("width", "50" + "%")
-    }, 3000)
-  }
-
   ngOnDestroy(): void {
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
     }
   }
 
+  getBsl(): Observable<void> {
+    var HeadersForBsl = new HttpHeaders();
 
+    if (this.authServer.getToken()) {
+      HeadersForBsl.append('Content-Type', 'application/json');
+      HeadersForBsl.append('Authorization', 'Bearer ' + this.authServer.getToken());
+    }
+
+    const options = {
+      headers: HeadersForBsl
+    };
+
+    return this.http.get(SERVER_API_URL + 'api/bsl/' + '4', options).pipe(
+      map((res: Response) => {
+        this.bsl = JSON.parse(res);
+      })
+    );
+  }
 }

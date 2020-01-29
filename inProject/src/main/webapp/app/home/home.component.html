@@ -8,7 +8,7 @@
     <div class="col-md-9">
         <h1 class="display-4 hometitle" jhiTranslate="home.title"  *ngSwitchCase="false">Insulin Glucagon Pump</h1>
         <!-- <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p> -->
-        
+
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success alert-user" *ngSwitchCase="true">
                 <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message"
@@ -52,16 +52,16 @@
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
               </div>
-              <div class="reservoir-labels"><h5 class="reservoir-text">Glucagon Reservoir</h5><button type="button" class="btn btn-primary reservoir-button">Refill</button></div> 
+              <div class="reservoir-labels"><h5 class="reservoir-text">Glucagon Reservoir</h5><button type="button" class="btn btn-primary reservoir-button">Refill</button></div>
               <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
               </div>
-            </div>  
+            </div>
             <div *ngSwitchCase="true" class="chart-container tab-pane fade active show" id="graph">
                 <canvas baseChart [chartType]="'line'" [datasets]="datasets" [options]="options">
                 </canvas>
             </div>
-                     
+
               <div *ngSwitchCase="true" class="log-div">
               <ol class="breadcrumb" >
                 <li class="breadcrumb-item"><a href="#">Log Messages</a></li>
@@ -69,26 +69,32 @@
               <div class="scrollable-messages">
               <div class="list-group">
                 <a href="#" class="list-group-item list-group-item-action active">
-                  Insulin injected at 2pm.
+                    Insulin injected at 2pm.
                 </a>
-                <a href="#" class="list-group-item list-group-item-action">Glucagon injected at 4pm.
+                <a href="#" class="list-group-item list-group-item-action">
+                    Glucagon injected at 4pm.
                 </a>
-                <a href="#" class="list-group-item list-group-item-action disabled">Blood sugar level high at 2pm.
+                <a href="#" class="list-group-item list-group-item-action disabled">
+                    Blood sugar level high at 2pm.
                 </a>
                 <a href="#" class="list-group-item list-group-item-action active">
                     Insulin injected at 2pm.
-                  </a>
-                  <a href="#" class="list-group-item list-group-item-action">Glucagon injected at 4pm.
-                  </a>
-                  <a href="#" class="list-group-item list-group-item-action disabled">Blood sugar level high at 2pm.
-                  </a>
-                  <a href="#" class="list-group-item list-group-item-action active">
-                    Insulin injected at 2pm.
-                  </a>
-                  <a href="#" class="list-group-item list-group-item-action">Glucagon injected at 4pm.
-                  </a>
-                  <a href="#" class="list-group-item list-group-item-action disabled">Blood sugar level high at 2pm.
-                  </a>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    Glucagon injected at 4pm.
+                </a>
+                <a href="#" class="list-group-item list-group-item-action disabled">
+                    Blood sugar level high at 2pm.
+                </a>
+                <a href="#" class="list-group-item list-group-item-action active">
+                Insulin injected at 2pm.
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    Glucagon injected at 4pm.
+                </a>
+                <a href="#" class="list-group-item list-group-item-action disabled">
+                    Blood sugar level high at 2pm.
+                </a>
               </div>
             </div>
              </div>
