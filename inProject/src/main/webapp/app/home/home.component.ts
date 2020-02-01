@@ -13,7 +13,6 @@ import { Bsl } from './bsl';
 import { SERVER_API_URL } from '../app.constants';
 import { map } from 'rxjs/operators';
 
-
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.component.html',
@@ -24,22 +23,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   identity: any;
   authSubscription?: Subscription;
   HeadersForBsl: any;
-  bsl:  Observable<Bsl>;
+  public bsl: Bsl[];
   //batterybar: any;
 
-  datasets: any[] = [{
+  datasets: any[] = [
+    {
+      data: [],
 
-    data: [],
+      label: 'Blood Sugar level',
 
-    label: 'Blood Sugar level',
+      //lineTension: 0,
 
-    //lineTension: 0,
+      //borderDash: [8, 4],
 
-    //borderDash: [8, 4],
-
-    fill: false
-
-  }/*, {
+      fill: false
+    } /*, {
 
     data: [],
 
@@ -52,111 +50,164 @@ export class HomeComponent implements OnInit, OnDestroy {
     label: 'Dataset 3'
 
   }*/
-
-];
+  ];
 
   options: any = {
-
     scales: {
+      xAxes: [
+        {
+          type: 'realtime',
 
-      xAxes: [{
+          realtime: {
+            onRefresh(chart: any) {
+              this.getBsl();
+              console.log(JSON.stringify(this));
 
-        type: 'realtime',
+              chart.data.datasets.forEach(function(dataset: any) {
+                dataset.data.push({
+                  x: Date.now(),
 
-        realtime: {
-
-          onRefresh (chart: any) {
-
-            chart.data.datasets.forEach(function (dataset: any) {
-
-              dataset.data.push({
-
-                x: Date.now(),
-
-                y: Math.floor(Math.random() * (200 - 100 + 1)) + 100
-
+                  y: this.bsl.currentBsl
+                });
               });
+              chart.config.options.scales.yAxes[0].ticks.min = chart.helpers.niceNum(20);
+              chart.config.options.scales.yAxes[0].ticks.max = chart.helpers.niceNum(180);
+            },
 
-            });
-            chart.config.options.scales.yAxes[0].ticks.min =
-            chart.helpers.niceNum(20);
-        chart.config.options.scales.yAxes[0].ticks.max =
-            chart.helpers.niceNum(180);
-          },
-
-          delay: 2000
-
+            delay: 2000
+          }
         }
-
-      }]
-
-    }, 
+      ]
+    },
     annotation: {
-      annotations: [{
+      annotations: [
+        {
           type: 'line',
           mode: 'horizontal',
           scaleID: 'y-axis-0',
-          value: '150',
+          value: '120',
           borderColor: 'tomato',
           borderWidth: 2
-      },
-      {
-        type: 'line',
-        mode: 'horizontal',
-        scaleID: 'y-axis-0',
-        value: '90',
-        borderColor: 'blue',
-        borderWidth: 2
-    }],
+        },
+        {
+          type: 'line',
+          mode: 'horizontal',
+          scaleID: 'y-axis-0',
+          value: '70',
+          borderColor: 'blue',
+          borderWidth: 2
+        }
+      ]
       //drawTime: "afterDraw" // (default)
-  }};
+    }
+  };
 
-  constructor( private http: HttpClient, private accountService: AccountService, private loginModalService: LoginModalService,  private authServer: AuthServerProvider) {}
+  constructor(
+    private http: HttpClient,
+    private accountService: AccountService,
+    private loginModalService: LoginModalService,
+    private authServer: AuthServerProvider
+  ) {}
 
   ngOnInit(): void {
     this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
-     console.log("serv",this.authServer.getToken());
-     
+    console.log('serv', this.authServer.getToken());
+
     //this.batterybar = document.getElementById("batterybar")?.offsetWidth;
     //console.log("width",this.batterybar);
   }
 
   isAuthenticated(): boolean {
     return this.accountService.isAuthenticated();
-    
   }
 
   login(): void {
     this.loginModalService.open();
   }
 
-  refillInsulin(): void {
-    console.log("BSL Testing", this.bsl);
+  rand(): Number {
+    return Math.floor(Math.random() * (200 - 100 + 1)) + 100;
   }
 
-  getBsl(): Observable<Bsl> {
-    console.log("account", this.account);
-     this.HeadersForBsl = new HttpHeaders();
+  refillInsulin(): void {
+    console.log('BSL Testing', this.bsl);
+  }
+
+  triggerCarbsChangeEvent(value: String): void {
+    console.log('in triggerCarbs');
+    var carbs = 0;
+    switch (value) {
+      case '1':
+        carbs = -30;
+        break;
+      case '2':
+        carbs = 100;
+        break;
+      case '3':
+        carbs = 40;
+        break;
+      default:
+        break;
+    }
+    if (carbs) {
+      this.getBslForCarbo(carbs);
+    }
+
+    console.log(this.bsl.currentBsl);
+  }
+
+  getBsl(): void {
+    console.log('account', this.account.id);
+    this.HeadersForBsl = new HttpHeaders();
     if (this.authServer.getToken()) {
       this.HeadersForBsl.append('Content-Type', 'application/json');
       this.HeadersForBsl.append('Authorization', 'Bearer ' + this.authServer.getToken());
     }
-    console.log("header", this.HeadersForBsl);
+
     const options = {
       headers: this.HeadersForBsl
     };
 
-    this.bsl = this.http.get<Bsl>(SERVER_API_URL + 'api/bsl/' + '4', options).pipe(
-      map((res: Bsl) => {
-        //this.bsl = JSON.parse(res);
-        return res;
-      })
-    );
-     
-    console.log("BSLLLLL", this.bsl);
-    return this.bsl;
+    this.http
+      .get<Bsl[]>(SERVER_API_URL + 'api/bsl/' + this.account.id, options)
+      .pipe(
+        map((res: Bsl[]) => {
+          //this.bsl = JSON.parse(res);
+          return res;
+        })
+      )
+      .subscribe(data => (this.bsl = data));
 
-    
+    console.log('BSLLLLL', this.bsl.currentBsl);
+
+    //return this.bsl;
+  }
+
+  getBslForCarbo(carbs: number): void {
+    console.log('inside getBslForCarbs' + carbs);
+    this.HeadersForBsl = new HttpHeaders();
+    if (this.authServer.getToken()) {
+      this.HeadersForBsl.append('Content-Type', 'application/json');
+      this.HeadersForBsl.append('Authorization', 'Bearer ' + this.authServer.getToken());
+    }
+
+    const options = {
+      headers: this.HeadersForBsl
+    };
+
+    this.http
+      .get<Bsl[]>(SERVER_API_URL + 'api/bslCarbs/' + this.account.id + '/' + carbs, options)
+      .pipe(
+        map((res: Bsl[]) => {
+          //this.bsl = JSON.parse(res);
+          return res;
+        })
+      )
+      .subscribe(data => (this.bsl = data));
+
+    console.log('BSLLLLL', this.bsl.currentBsl);
+
+    //return this.bsl;
   }
 
   ngOnDestroy(): void {
@@ -164,6 +215,4 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.authSubscription.unsubscribe();
     }
   }
-
-  
 }

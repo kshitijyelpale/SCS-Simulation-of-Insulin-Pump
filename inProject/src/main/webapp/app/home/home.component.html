@@ -39,8 +39,8 @@
                       <button type="button" (click)="getBsl()" class="btn btn-primary battery-button">Recharge</button>
                 </div>
                 <div class="form-group activity-dropdown">
-                    <select class="custom-select">
-                      <option selected="">Select Activity from here :</option>
+                    <select class="custom-select" (change)="triggerCarbsChangeEvent($event.target.value)">
+                      <option value="activity" selected="">Select Activity from here :</option>
                       <option value="1">Exercise</option>
                       <option value="2">Eating high calorie food</option>
                       <option value="3">Eating low calorie food</option>
