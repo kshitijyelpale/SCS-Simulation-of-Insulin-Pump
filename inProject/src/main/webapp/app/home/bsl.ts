@@ -1,3 +1,13 @@
+export interface BslResponse {
+    userId?: string;
+    timeCounter?: number;
+    previousBsl?: number;
+    currentBsl?: number;
+    message?: string;
+    injectionStarted?: boolean;
+    carbohydrates?: number;
+}
+
 export class Bsl {
   constructor(
     public userId: string = '',
