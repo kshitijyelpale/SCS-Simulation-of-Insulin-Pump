@@ -13,6 +13,7 @@ import { Bsl } from './bsl';
 import { SERVER_API_URL } from '../app.constants';
 import { map } from 'rxjs/operators';
 
+var homeObject;
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.component.html',
@@ -60,14 +61,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
           realtime: {
             onRefresh(chart: any) {
-              this.getBsl();
-              console.log(JSON.stringify(this));
+              homeObject.getBsl();
 
               chart.data.datasets.forEach(function(dataset: any) {
                 dataset.data.push({
                   x: Date.now(),
 
-                  y: this.bsl.currentBsl
+                  y: homeObject.bsl.currentBsl
                 });
               });
               chart.config.options.scales.yAxes[0].ticks.min = chart.helpers.niceNum(20);
@@ -107,7 +107,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private loginModalService: LoginModalService,
     private authServer: AuthServerProvider
-  ) {}
+  ) {
+    homeObject = this;
+  }
 
   ngOnInit(): void {
     this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
@@ -152,12 +154,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (carbs) {
       this.getBslForCarbo(carbs);
     }
-
-    console.log(this.bsl.currentBsl);
   }
 
   getBsl(): void {
-    console.log('account', this.account.id);
     this.HeadersForBsl = new HttpHeaders();
     if (this.authServer.getToken()) {
       this.HeadersForBsl.append('Content-Type', 'application/json');
@@ -178,13 +177,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       )
       .subscribe(data => (this.bsl = data));
 
-    console.log('BSLLLLL', this.bsl.currentBsl);
+    console.log('BSL ' + JSON.stringify(this.bsl));
 
     //return this.bsl;
   }
 
   getBslForCarbo(carbs: number): void {
-    console.log('inside getBslForCarbs' + carbs);
+    console.log('in getBslForCarbo' + carbs);
+
     this.HeadersForBsl = new HttpHeaders();
     if (this.authServer.getToken()) {
       this.HeadersForBsl.append('Content-Type', 'application/json');
@@ -205,7 +205,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       )
       .subscribe(data => (this.bsl = data));
 
-    console.log('BSLLLLL', this.bsl.currentBsl);
+    console.log('BSL ' + JSON.stringify(this.bsl));
 
     //return this.bsl;
   }
