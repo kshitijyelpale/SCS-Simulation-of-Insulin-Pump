@@ -12,23 +12,27 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Bsl } from './bsl';
 import { SERVER_API_URL } from '../app.constants';
 import { map } from 'rxjs/operators';
+import * as $ from 'jquery';
 
+var abc;
 
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.component.html',
   styleUrls: ['home.scss']
 })
+
 export class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;
   identity: any;
   authSubscription?: Subscription;
   HeadersForBsl: any;
   bsl:  Observable<Bsl>;
+  
   //batterybar: any;
 
   datasets: any[] = [{
-
+    
     data: [],
 
     label: 'Blood Sugar level',
@@ -56,7 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 ];
 
   options: any = {
-
+    
     scales: {
 
       xAxes: [{
@@ -66,22 +70,23 @@ export class HomeComponent implements OnInit, OnDestroy {
         realtime: {
 
           onRefresh (chart: any) {
-
+             //console.log("Self thiss abc", abc );
+             
             chart.data.datasets.forEach(function (dataset: any) {
 
               dataset.data.push({
 
                 x: Date.now(),
 
-                y: Math.floor(Math.random() * (200 - 100 + 1)) + 100
+                y: abc.numnum()
 
               });
 
             });
-            chart.config.options.scales.yAxes[0].ticks.min =
-            chart.helpers.niceNum(20);
-        chart.config.options.scales.yAxes[0].ticks.max =
-            chart.helpers.niceNum(180);
+        //     chart.config.options.scales.yAxes[0].ticks.min  =
+        //     chart.helpers.niceNum(20);
+        // chart.config.options.scales.yAxes[0].ticks.max =
+        //     chart.helpers.niceNum(180);
           },
 
           delay: 2000
@@ -111,20 +116,34 @@ export class HomeComponent implements OnInit, OnDestroy {
       //drawTime: "afterDraw" // (default)
   }};
 
-  constructor( private http: HttpClient, private accountService: AccountService, private loginModalService: LoginModalService,  private authServer: AuthServerProvider) {}
+  constructor( private http: HttpClient, private accountService: AccountService, private loginModalService: LoginModalService,  private authServer: AuthServerProvider) {
+    var self = this;
+    abc = this;
+    this.numnum = this.numnum.bind(this);
+    //console.log("self cons",self);
+  }
 
   ngOnInit(): void {
     this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
-     console.log("serv",this.authServer.getToken());
+     //console.log("serv",this.authServer.getToken());
      
     //this.batterybar = document.getElementById("batterybar")?.offsetWidth;
     //console.log("width",this.batterybar);
   }
 
   isAuthenticated(): boolean {
+  
     return this.accountService.isAuthenticated();
     
   }
+
+  // numnum = (): number => {
+  //  return 100;
+  // }
+
+  numnum(): number{
+     return 100;
+    }
 
   login(): void {
     this.loginModalService.open();
@@ -135,6 +154,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getBsl(): Observable<Bsl> {
+    console.log("this",this);
     console.log("account", this.account);
      this.HeadersForBsl = new HttpHeaders();
     if (this.authServer.getToken()) {
@@ -153,10 +173,27 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
     );
      
-    console.log("BSLLLLL", this.bsl);
+    //console.log("BSLLLLL", this.bsl);
     return this.bsl;
 
     
+  }
+  
+  
+  drainbattery() : any {
+    
+    setInterval(() => this.drainbatterytimer(),2000);
+  }
+
+  drainbatterytimer() :any {
+   
+    let w = $("#batterybar").width();
+        if(w>50){
+      $("#batterybar").width(w-20);
+    
+  }
+
+    //console.log("Widthhh",w);
   }
 
   ngOnDestroy(): void {
