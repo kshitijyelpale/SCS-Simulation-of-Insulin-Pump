@@ -78,6 +78,9 @@ public class PumpService {
                 // case: BSL > 120
                 calculatedBsl = calculateBslForHyperGlycemia(currentBsl);
                 Double insulinDosageValue = getInsulinDosageValue(currentBsl);
+                double insulinAmount = updateInsulinInReservoir(bsl.getInsulinInReservoir(), insulinDosageValue);
+                bsl.setInsulinInReservoir(insulinAmount);
+
                 message = "After " + insulinDosageValue + " of insulin injection, BSL decreased from " + currentBsl + " " +
                     " to " + calculatedBsl + "mg/dL";
 
@@ -89,6 +92,9 @@ public class PumpService {
                 // case: BSL < 70
                 calculatedBsl = calculateBslForHypoGlycemia(currentBsl);
                 Double glucagonDosageValue = getGlucagonDosageValue(currentBsl);
+                double glucagonnAmount = updateGlucagonInReservoir(bsl.getGlucagonInReservoir(), glucagonDosageValue);
+                bsl.setGlucagonInReservoir(glucagonnAmount);
+
                 message = "After " + glucagonDosageValue + " of glucagon injection, BSL increased from " + currentBsl +
                     " to " + calculatedBsl + "mg/dL";
 
@@ -136,6 +142,7 @@ public class PumpService {
             if (newActivity) {
                 bsl.setCarbohydrates(carbs);
                 bsl.setTimeCounter(0);
+                bsl.setInjectionStarted(false);
 
                 log.info("New activity - values of carbohydrates and time counter reset");
                 log.debug("New activity - values of carbohydrates and time counter reset");
@@ -161,6 +168,23 @@ public class PumpService {
     }
 
 
+    public void resetReservoir(int userId, String reservoirType) {
+        System.out.println("in resetReservoir");
+        if ((userJsonMap.get(userId) == null)) {
+            return;
+        }
+        bsl = userJsonMap.get(userId);
+
+	    if (reservoirType.equalsIgnoreCase("insulin")) {
+	        bsl.setInsulinInReservoir(10);
+        }
+	    else if (reservoirType.equalsIgnoreCase("glucagon")) {
+	        bsl.setGlucagonInReservoir(10);
+        }
+        userJsonMap.put(userId, bsl);
+    }
+
+
 	//================================== private methods ===============================================================
 
 
@@ -170,6 +194,11 @@ public class PumpService {
         bsl.setPreviousBsl(90);
         bsl.setCurrentBsl(90);
         bsl.setTimeCounter(0);
+        bsl.setMessage(null);
+        bsl.setInjectionStarted(false);
+        bsl.setCarbohydrates(0);
+        bsl.setInsulinInReservoir(10);
+        bsl.setGlucagonInReservoir(10);
         userJsonMap.put(userId, bsl);
 
         return bsl;
@@ -271,4 +300,33 @@ public class PumpService {
 	    mailService.sendEmail(conatcts, "","", false, false);
     }
 
+
+    private double updateInsulinInReservoir(double insulinAmount, Double insulinDosageValue) {
+	    if (insulinAmount < 2) {
+
+        }
+
+	    if ((insulinAmount - insulinAmount) > 0) {
+            insulinAmount -= insulinDosageValue;
+
+            return insulinAmount;
+        }
+
+	    return 0;
+    }
+
+
+    private double updateGlucagonInReservoir(double glucagonnAmount, Double glucagonDosageValue) {
+        if (glucagonnAmount < 2) {
+
+        }
+
+        if ((glucagonnAmount - glucagonnAmount) > 0) {
+            glucagonnAmount -= glucagonDosageValue;
+
+            return glucagonnAmount;
+        }
+
+        return 0;
+    }
 }
