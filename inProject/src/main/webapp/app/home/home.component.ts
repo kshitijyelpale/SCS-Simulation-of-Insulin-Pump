@@ -12,6 +12,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Bsl } from './bsl';
 import { SERVER_API_URL } from '../app.constants';
 import { map } from 'rxjs/operators';
+import * as $ from 'jquery';
 
 var homeObject;
 @Component({
@@ -145,21 +146,21 @@ export class HomeComponent implements OnInit, OnDestroy {
       headers: this.HeadersForBsl
     };
 
-    this.http
-      .get(SERVER_API_URL + 'api/reservoir/refill/' + this.account.id + 'insulin', options)
-      .pipe(
-        map((res: Response) => {
-          //this.bsl = JSON.parse(res);
-          return res;
-        })
-      )
-      .subscribe();
-
-    console.log('refillInsulin');
+    this.http.post(SERVER_API_URL + 'api/reservoir/refill/' + this.account.id + '/insulin', '', options).subscribe();
   }
 
   refillGlucagon(): void {
-    console.log('BSL Testing', this.bsl);
+    this.HeadersForBsl = new HttpHeaders();
+    if (this.authServer.getToken()) {
+      this.HeadersForBsl.append('Content-Type', 'application/json');
+      this.HeadersForBsl.append('Authorization', 'Bearer ' + this.authServer.getToken());
+    }
+
+    const options = {
+      headers: this.HeadersForBsl
+    };
+
+    this.http.post(SERVER_API_URL + 'api/reservoir/refill/' + this.account.id + '/glucagon', '', options).subscribe();
   }
 
   triggerCarbsChangeEvent(value: String): void {
@@ -205,6 +206,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe(data => (this.bsl = data));
 
     console.log('BSL ' + JSON.stringify(this.bsl));
+
+    $('#insulinprogressbar')
+      .attr('aria-valuenow', this.bsl.insulinInReservoir * 10 + '%')
+      .css('width', this.bsl.insulinInReservoir * 10 + '%');
+
+    $('#glucagonprogressbar')
+      .attr('aria-valuenow', this.bsl.glucagonInReservoir * 10 + '%')
+      .css('width', this.bsl.glucagonInReservoir * 10 + '%');
 
     //return this.bsl;
   }
