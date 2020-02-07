@@ -169,7 +169,6 @@ public class PumpService {
 
 
     public void resetReservoir(int userId, String reservoirType) {
-        System.out.println("in resetReservoir");
         if ((userJsonMap.get(userId) == null)) {
             return;
         }
@@ -302,11 +301,14 @@ public class PumpService {
 
 
     private double updateInsulinInReservoir(double insulinAmount, Double insulinDosageValue) {
+
+	    log.debug("======================insulinAmount:" + insulinAmount + "=========");
+
 	    if (insulinAmount < 2) {
 
         }
 
-	    if ((insulinAmount - insulinAmount) > 0) {
+	    if ((insulinAmount - insulinDosageValue) > 0) {
             insulinAmount -= insulinDosageValue;
 
             return insulinAmount;
@@ -321,7 +323,8 @@ public class PumpService {
 
         }
 
-        if ((glucagonnAmount - glucagonnAmount) > 0) {
+        glucagonDosageValue *= 0.1;
+        if ((glucagonnAmount - glucagonDosageValue) > 0) {
             glucagonnAmount -= glucagonDosageValue;
 
             return glucagonnAmount;

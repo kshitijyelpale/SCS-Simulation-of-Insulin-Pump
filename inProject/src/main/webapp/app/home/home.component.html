@@ -50,11 +50,11 @@
             <div class="reservoir-div"  *ngSwitchCase="true">
             <div class="reservoir-labels"><h5 class="reservoir-text">Insulin Reservoir</h5><button type="button" (click)="refillInsulin()" class="btn btn-primary reservoir-button">Refill</button></div>
             <div class="progress">
-                <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 45%"></div>
+                <div id="insulinprogressbar" class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" aria-valuenow="100%" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
               </div>
               <div class="reservoir-labels"><h5 class="reservoir-text">Glucagon Reservoir</h5><button type="button" (click)="refillGlucagon()"class="btn btn-primary reservoir-button">Refill</button></div>
               <div class="progress">
-                <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                <div id="glucagonprogressbar" class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
               </div>
             </div>
             
