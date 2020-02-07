@@ -60,4 +60,9 @@ public class BslController {
 		
 		return jsonBsl;
 	}
+
+	@GetMapping("/reservoir/refill/{userId}/{reservoirType}")
+	public void resetReservoir(@PathVariable int userId, @PathVariable("reservoirType") String reservoirType) {
+	    pumpService.resetReservoir(userId, reservoirType);
+    }
 }

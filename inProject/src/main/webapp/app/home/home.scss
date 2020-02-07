@@ -40,17 +40,17 @@ body{
 }
 
 .chart-container{
-    position: relative;
-    left: -60px;
-    top: 80px;
-    transform: scale(0.9);
+  position: relative;
+  left: -20px;
+  top: 0px;
+  transform: scale(0.96);
 }
 
 .log-div{  
-  position: relative;
-  left: 890px;
+  position: absolute;
+  left: 900px;
   width: 420px;
-  top: -345px;
+  top: 140px;
 }
 
 .scrollable-messages{
@@ -84,6 +84,7 @@ body{
   .activity-battery{
     position: absolute;
     width: 820px;
+    top: -30px;
   }
   
   .activity-dropdown{
@@ -106,10 +107,83 @@ body{
     transform: scale(0.9);
 }
 
+.lowbattery{
+  background-color: #d62c1a !important;
+}
+
 #introvideo {
     left: 200px;
     top: -10px;
     position: relative;
+}
+
+.mat-tab-group {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  overflow: hidden;
+  position: relative;
+  top: 45px;
+}
+
+.mat-tab-body-content {
+  height: 100%;
+  overflow: hidden !important;
+}
+
+.text-bsl-card {
+    width: 50%;
+    margin-top: 30px;
+    background-color: #dee2e6;
+    border-radius: 20px;    
+   
+}
+
+.bsl-card-div {
+margin: 10%;
+text-align: center;
+font-size: 100px;
+color: #439c46;
+border-top: 5px solid white; 
+border-bottom: 5px solid white;
+}
+
+.mat-card-footer{
+  margin: 0px;
+  //background-color: #eb6274;
+  padding: 20px;
+  font-size: 18px;
+  border-radius: 20px;
+  //color: white;
+}
+
+.mat-card-header{
+margin: 0px;
+//background-color: #eb6274;
+padding: 12px;
+border-radius: 20px;
+//color: white;
+}
+
+.table-bsl-info {
+width: 50%;
+position: absolute;
+right: -16px;
+top: 40px;
+}
+
+.table-history-info {
+width: 50%;
+position: absolute;
+right: -16px;
+top: 310px;
+}
+
+.mat-bottom-sheet-container-large{
+position: absolute;
+top: 500px;
+left: 400px;
+background-color: #ff0057;
 }
 
 /* wait autoprefixer update to allow simple generation of high pixel density media query */

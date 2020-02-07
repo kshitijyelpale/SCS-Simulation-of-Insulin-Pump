@@ -15,6 +15,20 @@ h4 {
   font-weight: 300;
 }
 
+.mat-tab-body-content {
+  height: 100%;
+  overflow: hidden !important;
+}
+
+.mat-bottom-sheet-container-large{
+  position: absolute;
+  height: 50px;
+  top: 500px;
+  left: 400px;
+  background-color: #ff0057;
+  }
+  
+
 a:hover {
   /* make sure browsers use the pointer cursor for anchors, even with no href */
   cursor: pointer;

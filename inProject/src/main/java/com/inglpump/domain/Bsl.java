@@ -9,6 +9,8 @@ public class Bsl {
 	private String message;
 	private boolean injectionStarted;
 	private double carbohydrates;
+	private double insulinInReservoir;
+	private double glucagonInReservoir;
 
     public int getUserId() {
 		return userId;
@@ -66,10 +68,28 @@ public class Bsl {
         this.injectionStarted = injectionStarted;
     }
 
-	@Override
-	public String toString() {
-		return "Bsl [userId=" + userId + ", timeCounter=" + timeCounter + ", previousBsl=" + previousBsl
-				+ ", currentBsl=" + currentBsl + ", message=" + message + "]";
-	}
+    public double getInsulinInReservoir() {
+        return insulinInReservoir;
+    }
+
+    public void setInsulinInReservoir(double insulinInReservoir) {
+        this.insulinInReservoir = insulinInReservoir;
+    }
+
+    public double getGlucagonInReservoir() {
+        return glucagonInReservoir;
+    }
+
+    public void setGlucagonInReservoir(double glucagonInReservoir) {
+        this.glucagonInReservoir = glucagonInReservoir;
+    }
+
+    @Override
+    public String toString() {
+        return "Bsl{" + "userId=" + userId + ", timeCounter=" + timeCounter + ", previousBsl=" + previousBsl + ", " +
+            "currentBsl=" + currentBsl + ", message='" + message + '\'' + ", injectionStarted=" + injectionStarted +
+            ", carbohydrates=" + carbohydrates + ", insulinInReservoir=" + insulinInReservoir + ", " +
+            "glucagonInReservoir=" + glucagonInReservoir + '}';
+    }
 
 }

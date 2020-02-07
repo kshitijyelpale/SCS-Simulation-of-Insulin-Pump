@@ -36,11 +36,11 @@
                     <div class="progress" style="width: 60%;">
                         <div id="batterybar" class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" style="width: 90%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
-                      <button type="button" class="btn btn-primary battery-button">Recharge</button>
+                      <button type="button" (click)="openBottomSheet()" class="btn btn-primary battery-button">Recharge</button>
                 </div>
                 <div class="form-group activity-dropdown">
-                    <select class="custom-select">
-                      <option selected="">Select Activity from here :</option>
+                    <select class="custom-select" (change)="triggerCarbsChangeEvent($event.target.value)">
+                      <option value="activity" selected="">Select Activity from here :</option>
                       <option value="1">Exercise</option>
                       <option value="2">Eating high calorie food</option>
                       <option value="3">Eating low calorie food</option>
@@ -50,18 +50,66 @@
             <div class="reservoir-div"  *ngSwitchCase="true">
             <div class="reservoir-labels"><h5 class="reservoir-text">Insulin Reservoir</h5><button type="button" (click)="refillInsulin()" class="btn btn-primary reservoir-button">Refill</button></div>
             <div class="progress">
-                <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 45%"></div>
               </div>
-              <div class="reservoir-labels"><h5 class="reservoir-text">Glucagon Reservoir</h5><button type="button" class="btn btn-primary reservoir-button">Refill</button></div>
+              <div class="reservoir-labels"><h5 class="reservoir-text">Glucagon Reservoir</h5><button type="button" (click)="refillGlucagon()"class="btn btn-primary reservoir-button">Refill</button></div>
               <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
               </div>
             </div>
-            <div *ngSwitchCase="true" class="chart-container tab-pane fade active show" id="graph">
-                <canvas baseChart [chartType]="'line'" [datasets]="datasets" [options]="options">
-                </canvas>
-            </div>
-
+            
+            <mat-tab-group *ngSwitchCase="true">
+                <mat-tab label="Graphical View">
+                    <div *ngSwitchCase="true" class="chart-container tab-pane fade active show" id="graph">
+                        <canvas baseChart [chartType]="'line'" [datasets]="datasets" [options]="options"  [colors]="chartColors">
+                        </canvas>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Textual View">
+                    <mat-card class="text-bsl-card">
+                        <mat-card-header>
+                            <mat-card-title>Current Blood Sugar Level</mat-card-title>
+                            <mat-card-subtitle>mg/dL</mat-card-subtitle>
+                          </mat-card-header>
+                          <mat-card-content>
+                              <div class="bsl-card-div">
+                                90
+                              </div>
+                              <mat-card-footer>
+                                Time : 4:02:45 PM
+                            </mat-card-footer>
+                          </mat-card-content>
+                    </mat-card>
+                    <table class="table table-hover table-bsl-info">
+                        <tbody>
+                            <tr class="table-info">
+                                <th scope="row">Hyper level</th>
+                                <td>Above 120 mg/dL</td>
+                            </tr>
+                            <tr class="table-success">
+                                <th scope="row">Normal level</th>
+                                <td>Between 70-120 mg/dL (ideal : 90 mg/dL)</td>
+                            </tr>
+                            <tr class="table-warning">
+                                <th scope="row">Hypo level</th>
+                                <td>Below 70 mg/dL</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-hover table-history-info">
+                        <tbody>
+                            <tr class="table-danger">
+                                <th scope="row">Previous BSL level</th>
+                                <td>120 mg/dL</td>
+                            </tr>
+                            <tr class="table-danger">
+                                <th scope="row">Last Carbohydrate Intake</th>
+                                <td>120 grams</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </mat-tab>
+                   </mat-tab-group>
               <div *ngSwitchCase="true" class="log-div">
               <ol class="breadcrumb" >
                 <li class="breadcrumb-item"><a href="#">Log Messages</a></li>
