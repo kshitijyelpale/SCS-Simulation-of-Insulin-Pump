@@ -11,6 +11,10 @@ public class Bsl {
 	private double carbohydrates;
 	private double insulinInReservoir;
 	private double glucagonInReservoir;
+	private boolean isEmailSentForInsulin;
+	private boolean isEmailSentForGlucagon;
+	private int alertCounterForHyperLevel;
+	private int alertCounterForHypoLevel;
 
     public int getUserId() {
 		return userId;
@@ -84,12 +88,52 @@ public class Bsl {
         this.glucagonInReservoir = glucagonInReservoir;
     }
 
+    public boolean isEmailSentForInsulin() {
+        return isEmailSentForInsulin;
+    }
+
+    public boolean isEmailSentForGlucagon() {
+        return isEmailSentForGlucagon;
+    }
+
+    public void setEmailSentForInsulin(boolean emailSentForInsulin) {
+        isEmailSentForInsulin = emailSentForInsulin;
+    }
+
+    public void setEmailSentForGlucagon(boolean emailSentForGlucagon) {
+        isEmailSentForGlucagon = emailSentForGlucagon;
+    }
+
+    public void incrementHyperAlertCounter() {
+        this.alertCounterForHyperLevel++;
+    }
+
+    public void resetHyperAlertCounter() {
+        this.alertCounterForHyperLevel = 0;
+    }
+
+    public void incrementHypoAlertCounter() {
+        this.alertCounterForHypoLevel++;
+    }
+
+    public void resetHypoAlertCounter() {
+        this.alertCounterForHypoLevel = 0;
+    }
+
+    public int getAlertCounterForHyperLevel() {
+        return alertCounterForHyperLevel;
+    }
+
+    public int getAlertCounterForHypoLevel() {
+        return alertCounterForHypoLevel;
+    }
+
     @Override
     public String toString() {
         return "Bsl{" + "userId=" + userId + ", timeCounter=" + timeCounter + ", previousBsl=" + previousBsl + ", " +
             "currentBsl=" + currentBsl + ", message='" + message + '\'' + ", injectionStarted=" + injectionStarted +
             ", carbohydrates=" + carbohydrates + ", insulinInReservoir=" + insulinInReservoir + ", " +
-            "glucagonInReservoir=" + glucagonInReservoir + '}';
+            "glucagonInReservoir=" + glucagonInReservoir + ", isEmailSentForInsulin=" + isEmailSentForInsulin + ", " +
+            "isEmailSentForGlucagon=" + isEmailSentForGlucagon + '}';
     }
-
 }

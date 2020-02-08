@@ -1,6 +1,7 @@
 package com.inglpump.config;
 
 import com.inglpump.domain.User;
+import com.inglpump.service.PumpService;
 import com.inglpump.service.UserLogService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,9 @@ public class InsulinPumpConfig {
 
     /*@Bean
     public UserService userService() { return new UserService(); }*/
+
+    @Bean
+    public PumpService pumpService() { return new PumpService(); }
 
     @Bean
     public UserLogService patientLogService() { return new UserLogService(); }

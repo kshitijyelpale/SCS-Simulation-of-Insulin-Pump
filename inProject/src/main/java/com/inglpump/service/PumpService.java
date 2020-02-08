@@ -69,15 +69,42 @@ public class PumpService {
             }
 
             bsl = userJsonMap.get(userId);
+            user = userService.getUser(userId);
             double currentBsl = bsl.getCurrentBsl();
             double calculatedBsl = 0;
             String message = null;
+
+            if (currentBsl > 120) {
+                bsl.incrementHyperAlertCounter();
+
+                if (bsl.getAlertCounterForHypoLevel() != 0) {
+                    bsl.resetHypoAlertCounter();
+                }
+            } else if (currentBsl < 70) {
+                bsl.incrementHypoAlertCounter();
+
+                if (bsl.getAlertCounterForHyperLevel() != 0) {
+                    bsl.resetHyperAlertCounter();
+                }
+            }
 
             if (currentBsl > 120) {
                 log.debug("In range of hyper");
                 // case: BSL > 120
                 calculatedBsl = calculateBslForHyperGlycemia(currentBsl);
                 Double insulinDosageValue = getInsulinDosageValue(currentBsl);
+
+                if (!bsl.isEmailSentForInsulin() && bsl.getInsulinInReservoir() <= 1) {
+                    log.debug("================================ Email sent to contacts for " +
+                        "insulin===================");
+
+                    this.sendEMail(userId, "Emergency to your friend/relative " + user.getFirstName() + " " + "user" +
+                        user.getLastName(), "Hello, \n\n    Tell your contact to refill the insulin reservoir " +
+                        "immediately");
+
+                    bsl.setEmailSentForInsulin(true);
+                }
+
                 double insulinAmount = updateInsulinInReservoir(bsl.getInsulinInReservoir(), insulinDosageValue);
                 bsl.setInsulinInReservoir(insulinAmount);
 
@@ -92,7 +119,22 @@ public class PumpService {
                 // case: BSL < 70
                 calculatedBsl = calculateBslForHypoGlycemia(currentBsl);
                 Double glucagonDosageValue = getGlucagonDosageValue(currentBsl);
+
+                if (!bsl.isEmailSentForGlucagon() && bsl.getGlucagonInReservoir() <= 1) {
+                    log.debug("================================ Email sent to contacts for " +
+                        "glucagon===================");
+
+                    this.sendEMail(userId, "Emergency to your friend/relative " + user.getFirstName() + " " + "user" +
+                        user.getLastName(), "Hello, \n\n    Tell your contact to refill the Glucagon reservoir " +
+                        "immediately");
+
+                    bsl.setEmailSentForGlucagon(true);
+                }
+
                 double glucagonnAmount = updateGlucagonInReservoir(bsl.getGlucagonInReservoir(), glucagonDosageValue);
+                if (glucagonDosageValue != 0 && glucagonnAmount == 0) {
+                    calculatedBsl = calculateBslforIdeal(currentBsl);
+                }
                 bsl.setGlucagonInReservoir(glucagonnAmount);
 
                 message = "After " + glucagonDosageValue + " of glucagon injection, BSL increased from " + currentBsl +
@@ -111,6 +153,19 @@ public class PumpService {
             else {
                 log.debug("Injection is not yet started. Calculating BSL by considering carbohydrates.");
                 return getBslForCarbo(userId, bsl.getCarbohydrates(), false);
+            }
+
+            if (calculatedBsl > 120 && bsl.getAlertCounterForHyperLevel() > 2) {
+                this.sendEMail(userId, "Emergency to your friend/relative " + user.getFirstName() + " " + "user" +
+                    user.getLastName(),
+                    "Hello, \n\nTell your contact to do some exercise. \n His/her BSL is in Hyper level for long " +
+                        "time ");
+            }
+            else if(calculatedBsl < 70 && bsl.getAlertCounterForHypoLevel() > 2) {
+                this.sendEMail(userId, "Emergency to your friend/relative " + user.getFirstName() + " " + "user" +
+                        user.getLastName(),
+                    "Hello, \n\n    Tell your contact to take some food. \n His/her BSL is in Hypo level for long " +
+                        "time ");
             }
 
             if (calculatedBsl != 0) {
@@ -176,9 +231,11 @@ public class PumpService {
 
 	    if (reservoirType.equalsIgnoreCase("insulin")) {
 	        bsl.setInsulinInReservoir(10);
+	        bsl.setEmailSentForInsulin(false);
         }
 	    else if (reservoirType.equalsIgnoreCase("glucagon")) {
 	        bsl.setGlucagonInReservoir(10);
+	        bsl.setEmailSentForGlucagon(false);
         }
         userJsonMap.put(userId, bsl);
     }
@@ -198,6 +255,11 @@ public class PumpService {
         bsl.setCarbohydrates(0);
         bsl.setInsulinInReservoir(10);
         bsl.setGlucagonInReservoir(10);
+        bsl.setEmailSentForInsulin(false);
+        bsl.setEmailSentForGlucagon(false);
+        bsl.resetHyperAlertCounter();
+        bsl.resetHypoAlertCounter();
+
         userJsonMap.put(userId, bsl);
 
         return bsl;
@@ -293,10 +355,10 @@ public class PumpService {
 	}
 
 
-	private void sendEMail(Integer userId) {
+	private void sendEMail(Integer userId, String subject, String content) {
         User user = userService.getUser(userId);
-        String conatcts = user.getEmergencyContacts();
-	    mailService.sendEmail(conatcts, "","", false, false);
+        String contacts = user.getEmergencyContacts();
+	    mailService.sendEmail(contacts, subject, content, false, false);
     }
 
 
@@ -304,9 +366,6 @@ public class PumpService {
 
 	    log.debug("======================insulinAmount:" + insulinAmount + "=========");
 
-	    if (insulinAmount < 2) {
-
-        }
 
 	    if ((insulinAmount - insulinDosageValue) > 0) {
             insulinAmount -= insulinDosageValue;
@@ -318,16 +377,13 @@ public class PumpService {
     }
 
 
-    private double updateGlucagonInReservoir(double glucagonnAmount, Double glucagonDosageValue) {
-        if (glucagonnAmount < 2) {
+    private double updateGlucagonInReservoir(double glucagonAmount, Double glucagonDosageValue) {
 
-        }
+        //glucagonDosageValue *= 0.1;
+        if ((glucagonAmount - glucagonDosageValue) > 0) {
+            glucagonAmount -= glucagonDosageValue;
 
-        glucagonDosageValue *= 0.1;
-        if ((glucagonnAmount - glucagonDosageValue) > 0) {
-            glucagonnAmount -= glucagonDosageValue;
-
-            return glucagonnAmount;
+            return glucagonAmount;
         }
 
         return 0;

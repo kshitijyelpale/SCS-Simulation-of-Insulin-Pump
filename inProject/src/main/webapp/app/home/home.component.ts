@@ -12,12 +12,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Bsl } from './bsl';
 import { SERVER_API_URL } from '../app.constants';
 import { map } from 'rxjs/operators';
-import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import * as $ from 'jquery';
 
 var homeObject;
 
-var alertMessage : any;
+var alertMessage: any;
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.component.html',
@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       data: [],
 
       label: ' Current Blood Sugar level',
-      type : 'line',
+      type: 'line',
       //borderColor: 'rgba(67, 156, 70, 0.1)',
 
       //lineTension: 0,
@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       xAxes: [
         {
           type: 'realtime',
-                 
+
           realtime: {
             duration: 25000,
             ttl: 60000,
@@ -84,16 +84,13 @@ export class HomeComponent implements OnInit, OnDestroy {
                   y: homeObject.bsl.currentBsl
                 });
               });
-                 
-              if(homeObject.bsl.currentBsl > 120 && homeObject.bsl.currentBsl < 130){
-               
+
+              if (homeObject.bsl.currentBsl > 120 && homeObject.bsl.currentBsl < 130) {
                 homeObject.openBottomSheet();
               }
               // chart.config.options.scales.yAxes[0].ticks.min = chart.helpers.niceNum(40);
               // chart.config.options.scales.yAxes[0].ticks.max = chart.helpers.niceNum(180);
-            },
-
-           
+            }
           },
           scaleLabel: {
             display: true,
@@ -101,28 +98,29 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         }
       ],
-      yAxes: [{
-				type: 'linear',
-        display: true,
-        ticks: {
-          suggestedMin: 50,
-          suggestedMax: 150,
-        }, 
-				scaleLabel: {
-					display: true,
-					labelString: 'Blood Sugar Levels mg/dL'
-				}
-			}]
-
+      yAxes: [
+        {
+          type: 'linear',
+          display: true,
+          ticks: {
+            suggestedMin: 50,
+            suggestedMax: 150
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'Blood Sugar Levels mg/dL'
+          }
+        }
+      ]
     },
     tooltips: {
-			mode: 'nearest',
-			intersect: false
-		},
-		// hover: {
-		// 	mode: 'nearest',
-		// 	intersect: false
-		// },
+      mode: 'nearest',
+      intersect: false
+    },
+    // hover: {
+    // 	mode: 'nearest',
+    // 	intersect: false
+    // },
     annotation: {
       annotations: [
         {
@@ -133,8 +131,8 @@ export class HomeComponent implements OnInit, OnDestroy {
           borderColor: 'blue',
           borderWidth: 2,
           label: {
-            backgroundColor: "blue",
-            content: "Hyper Level",
+            backgroundColor: 'blue',
+            content: 'Hyper Level',
             enabled: true
           }
         },
@@ -146,8 +144,8 @@ export class HomeComponent implements OnInit, OnDestroy {
           borderColor: 'orange',
           borderWidth: 2,
           label: {
-            backgroundColor: "orange",
-            content: "Hypo Level",
+            backgroundColor: 'orange',
+            content: 'Hypo Level',
             enabled: true
           }
         }
@@ -155,9 +153,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       //drawTime: "afterDraw" // (default)
     }
   };
-    
+
   public chartColors: any[] = [
-    { // first color
+    {
+      // first color
       borderColor: 'rgba(67, 156, 70, 1)',
       pointBackgroundColor: 'rgba(67, 156, 70, 1)',
       pointBorderColor: 'rgba(67, 156, 70, 1)'
@@ -230,9 +229,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         carbs = -30;
         break;
       case '2':
-        carbs = 100;
+        carbs = 200;
         break;
       case '3':
+        carbs = 100;
+        break;
+      case '4':
         carbs = 40;
         break;
       default:
@@ -267,13 +269,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     console.log('BSL ' + JSON.stringify(this.bsl));
 
     $('#insulinprogressbar')
-    .attr('aria-valuenow', this.bsl.insulinInReservoir * 10 + '%')
-    .css('width', this.bsl.insulinInReservoir * 10 + '%');
+      .attr('aria-valuenow', this.bsl.insulinInReservoir * 10 + '%')
+      .css('width', this.bsl.insulinInReservoir * 10 + '%');
 
-  $('#glucagonprogressbar')
-    .attr('aria-valuenow', this.bsl.glucagonInReservoir * 10 + '%')
-    .css('width', this.bsl.glucagonInReservoir * 10 + '%');
-
+    $('#glucagonprogressbar')
+      .attr('aria-valuenow', this.bsl.glucagonInReservoir * 10 + '%')
+      .css('width', this.bsl.glucagonInReservoir * 10 + '%');
 
     //return this.bsl;
   }
@@ -306,27 +307,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     //return this.bsl;
   }
 
-  drainbattery() : any {
-    
-    setInterval(() => this.drainbatterytimer(),2000);
+  drainbattery(): any {
+    setInterval(() => this.drainbatterytimer(), 2000);
   }
 
-  drainbatterytimer() :any {
-   
-    let w = $("#batterybar").width();
-        if(w>25){
-      $("#batterybar").width(w-2);
-      
-      if(w<90){
-       
-        $("#batterybar").addClass("lowbattery");
+  drainbatterytimer(): any {
+    let w = $('#batterybar').width();
+    if (w > 25) {
+      $('#batterybar').width(w - 2);
+
+      if (w < 90) {
+        $('#batterybar').addClass('lowbattery');
       }
+    }
   }
-}
 
-openBottomSheet(): void {
-  this._bottomSheet.open(BottomSheetOverviewExampleSheetComponent);
-}
+  openBottomSheet(): void {
+    this._bottomSheet.open(BottomSheetOverviewExampleSheetComponent);
+  }
 
   ngOnDestroy(): void {
     if (this.authSubscription) {
@@ -337,7 +335,7 @@ openBottomSheet(): void {
 
 @Component({
   selector: 'jhi-bottom-sheet-overview-example-sheet',
-  template:'<div><span mat-line>Google Keep</span><span mat-line>Add to a note</span></div> ',
+  template: '<div><span mat-line>Google Keep</span><span mat-line>Add to a note</span></div> ',
   styleUrls: ['home.scss']
 })
 export class BottomSheetOverviewExampleSheetComponent {
