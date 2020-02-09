@@ -152,19 +152,27 @@ public class PumpService {
                 calculatedBsl = calculateBslforIdeal(currentBsl);
 
                 log.debug("New BSL calculated considering metabolic rate. New current BSL value: " + calculatedBsl);
+
+                if (bsl.getAlertCounterForHypoLevel() != 0) {
+                    bsl.resetHypoAlertCounter();
+                }
+
+                if (bsl.getAlertCounterForHyperLevel() != 0) {
+                    bsl.resetHyperAlertCounter();
+                }
             }
             else {
                 log.debug("Injection is not yet started. Calculating BSL by considering carbohydrates.");
                 return getBslForCarbo(userId, bsl.getCarbohydrates(), false);
             }
 
-            if (calculatedBsl > 120 && bsl.getAlertCounterForHyperLevel() > 2) {
+            if (calculatedBsl > 120 && bsl.getAlertCounterForHyperLevel() > 1) {
                 this.sendEMail(userId, "Emergency to your friend/relative " + user.getFirstName() + " " + "user" +
                     user.getLastName(),
                     "Hello, \n\nTell your contact to do some exercise. \n His/her BSL is in Hyper level for long " +
                         "time ");
             }
-            else if(calculatedBsl < 70 && bsl.getAlertCounterForHypoLevel() > 2) {
+            else if(calculatedBsl < 70 && bsl.getAlertCounterForHypoLevel() > 1) {
                 this.sendEMail(userId, "Emergency to your friend/relative " + user.getFirstName() + " " + "user" +
                         user.getLastName(),
                     "Hello, \n\n    Tell your contact to take some food. \n His/her BSL is in Hypo level for long " +
