@@ -240,10 +240,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       case '1':
         carbs = -30;
         break;
-      case '2':
-        carbs = 100;
+        carbs = 200;
         break;
       case '3':
+        carbs = 100;
+        break;
+      case '4':
         carbs = 40;
         break;
       default:

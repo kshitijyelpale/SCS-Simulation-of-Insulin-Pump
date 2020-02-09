@@ -50,6 +50,9 @@ public class UserDTO {
 
     private Set<String> authorities;
 
+    @Size(max = 250)
+    private String emergencyContacts;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -67,6 +70,7 @@ public class UserDTO {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
+        this.emergencyContacts = user.getEmergencyContacts();
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
@@ -176,6 +180,14 @@ public class UserDTO {
         this.authorities = authorities;
     }
 
+    public String getEmergencyContacts() {
+        return emergencyContacts;
+    }
+
+    public void setEmergencyContacts(String emergencyContacts) {
+        this.emergencyContacts = emergencyContacts;
+    }
+
     @Override
     public String toString() {
         return "UserDTO{" +
@@ -191,6 +203,7 @@ public class UserDTO {
             ", lastModifiedBy='" + lastModifiedBy + '\'' +
             ", lastModifiedDate=" + lastModifiedDate +
             ", authorities=" + authorities +
+            ", emergencyContacts=" + emergencyContacts +
             "}";
     }
 }
