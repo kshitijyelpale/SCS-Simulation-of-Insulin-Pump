@@ -65,4 +65,10 @@ public class BslController {
         pumpService.resetReservoir(userId, reservoirType);
     }
 
+
+    @PostMapping("/reset/bsl/(userId)")
+    public void resetUserBSLData(@PathVariable int userId) {
+        pumpService.resetUserBSL(userId);
+    }
+
 }

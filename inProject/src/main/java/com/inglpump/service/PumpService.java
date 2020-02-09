@@ -108,8 +108,10 @@ public class PumpService {
                 double insulinAmount = updateInsulinInReservoir(bsl.getInsulinInReservoir(), insulinDosageValue);
                 bsl.setInsulinInReservoir(insulinAmount);
 
-                message = "After " + insulinDosageValue + " of insulin injection, BSL decreased from " + currentBsl + " " +
-                    " to " + calculatedBsl + "mg/dL";
+                message =
+                    "After " + insulinDosageValue + " of insulin injection, BSL decreased from " + PumpService.formatDouble(currentBsl) +
+                        " " +
+                    " to " + PumpService.formatDouble(calculatedBsl) + "mg/dL";
 
                 bsl.setInjectionStarted(true);
 
@@ -132,13 +134,14 @@ public class PumpService {
                 }
 
                 double glucagonnAmount = updateGlucagonInReservoir(bsl.getGlucagonInReservoir(), glucagonDosageValue);
-                if (glucagonDosageValue != 0 && glucagonnAmount == 0) {
+                /*if (glucagonDosageValue != 0 && glucagonnAmount == 0) {
                     calculatedBsl = calculateBslforIdeal(currentBsl);
-                }
+                }*/
                 bsl.setGlucagonInReservoir(glucagonnAmount);
 
-                message = "After " + glucagonDosageValue + " of glucagon injection, BSL increased from " + currentBsl +
-                    " to " + calculatedBsl + "mg/dL";
+                message =
+                    "After " + glucagonDosageValue + " of glucagon injection, BSL increased from " + PumpService.formatDouble(currentBsl) +
+                    " to " + PumpService.formatDouble(calculatedBsl) + "mg/dL";
 
                 bsl.setInjectionStarted(true);
                 log.debug("New value of BSL calculated when in hypo range. New current BSL value: " + calculatedBsl);
@@ -241,6 +244,17 @@ public class PumpService {
     }
 
 
+    public void resetUserBSL(int userId) {
+	    log.debug("=====================================resetUserBSL for User id: " + userId);
+	    userJsonMap.remove(userId);
+    }
+
+
+    public static double formatDouble(double value) {
+        return Double.parseDouble(new DecimalFormat("##.##").format(value));
+    }
+
+
 	//================================== private methods ===============================================================
 
 
@@ -316,13 +330,15 @@ public class PumpService {
 		if (currentBSL >= Constants.MaximumBloodSugarLevel) {
 			double insulinCorrectionFactor = (getChangeInBSForInsulin(currentBSL)) / Constants.ISF;
 
-			calculatedinsulindose = Double.parseDouble(new DecimalFormat("##.##").format(insulinCorrectionFactor));
+			calculatedinsulindose = formatDouble(insulinCorrectionFactor);
 		}
 
 		return calculatedinsulindose;
 	}
 
-	private static double getChangeInBSForInsulin(double currentBSL) {
+
+
+    private static double getChangeInBSForInsulin(double currentBSL) {
 		if (currentBSL <= 130) {
 			return 5;
 		} else if (currentBSL <= 150) {
@@ -348,7 +364,7 @@ public class PumpService {
 		double calculatedGlucagondose = 0;
 		if (currentBSL < Constants.MinimumBloodSugarLevel) {
 			calculatedGlucagondose = getChangeInBSForGlucagon(currentBSL) / 3;
-			calculatedGlucagondose = Double.parseDouble(new DecimalFormat("##.##").format(calculatedGlucagondose));
+			calculatedGlucagondose = formatDouble(calculatedGlucagondose);
 		}
 
 		return calculatedGlucagondose;
@@ -379,7 +395,7 @@ public class PumpService {
 
     private double updateGlucagonInReservoir(double glucagonAmount, Double glucagonDosageValue) {
 
-        //glucagonDosageValue *= 0.1;
+        glucagonDosageValue *= 0.1;
         if ((glucagonAmount - glucagonDosageValue) > 0) {
             glucagonAmount -= glucagonDosageValue;
 
