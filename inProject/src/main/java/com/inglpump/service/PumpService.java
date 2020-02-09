@@ -98,8 +98,10 @@ public class PumpService {
                     log.debug("================================ Email sent to contacts for " +
                         "insulin===================");
 
-                    this.sendEMail(userId, "Emergency to your friend/relative " + user.getFirstName() + " " + "user" +
-                        user.getLastName(), "Hello, \n\n    Tell your contact to refill the insulin reservoir " +
+                    this.sendEMail(userId, "Emergency to your friend/relative "
+                        + user.getFirstName() != "" ? user.getFirstName() : "" + " "
+                        + user.getLastName() != "" ? user.getLastName() : ""
+                        , "Hello, \n\n    Tell your contact to refill the insulin reservoir " +
                         "immediately");
 
                     bsl.setEmailSentForInsulin(true);
@@ -126,8 +128,9 @@ public class PumpService {
                     log.debug("================================ Email sent to contacts for " +
                         "glucagon===================");
 
-                    this.sendEMail(userId, "Emergency to your friend/relative " + user.getFirstName() + " " + "user" +
-                        user.getLastName(), "Hello, \n\n    Tell your contact to refill the Glucagon reservoir " +
+                    this.sendEMail(userId, "Emergency to your friend/relative "
+                        + user.getFirstName() != "" ? user.getFirstName() : "" + " "
+                        + user.getLastName() != "" ? user.getLastName() : "", "Hello, \n\n    Tell your contact to refill the Glucagon reservoir " +
                         "immediately");
 
                     bsl.setEmailSentForGlucagon(true);
@@ -167,14 +170,16 @@ public class PumpService {
             }
 
             if (calculatedBsl > 120 && bsl.getAlertCounterForHyperLevel() > 1) {
-                this.sendEMail(userId, "Emergency to your friend/relative " + user.getFirstName() + " " + "user" +
-                    user.getLastName(),
+                this.sendEMail(userId, "Emergency to your friend/relative "
+                        + user.getFirstName() != "" ? user.getFirstName() : "" + " "
+                        + user.getLastName() != "" ? user.getLastName() : "",
                     "Hello, \n\nTell your contact to do some exercise. \n His/her BSL is in Hyper level for long " +
                         "time ");
             }
             else if(calculatedBsl < 70 && bsl.getAlertCounterForHypoLevel() > 1) {
-                this.sendEMail(userId, "Emergency to your friend/relative " + user.getFirstName() + " " + "user" +
-                        user.getLastName(),
+                this.sendEMail(userId, "Emergency to your friend/relative "
+                        + user.getFirstName() != "" ? user.getFirstName() : "" + " "
+                        + user.getLastName() != "" ? user.getLastName() : "",
                     "Hello, \n\n    Tell your contact to take some food. \n His/her BSL is in Hypo level for long " +
                         "time ");
             }
