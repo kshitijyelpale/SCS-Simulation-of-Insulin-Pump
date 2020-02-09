@@ -113,6 +113,22 @@
                     </div>
                 </div>
 
+
+                <div class="form-group">
+                    <label class="form-control-label" for="contacts">Emergency Contacts</label>
+                    <input type="text" class="form-control" id="contacts" name="contacts"
+                           formControlName="contacts">
+
+                    <div *ngIf="registerForm.get('contacts')!.invalid && (registerForm.get('contacts')!.dirty || registerForm.get('contacts')!.touched)">
+                    <small class="form-text text-danger" *ngIf="registerForm.get('contacts')?.errors?.required"
+                            jhiTranslate="">
+                        Your emergency contacts are required.
+                    </small>
+                    </div>
+
+                </div>
+
+
                 <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary" jhiTranslate="register.form.button">Register</button>
             </form>
             <p></p>
