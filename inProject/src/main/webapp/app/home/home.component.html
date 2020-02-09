@@ -73,7 +73,7 @@
                             <mat-card-subtitle>mg/dL</mat-card-subtitle>
                           </mat-card-header>
                           <mat-card-content>
-                              <div class="bsl-card-div">
+                              <div id="bslcard" class="bsl-card-div">
                                 {{textualcurrentbsl}}
                               </div>
                               <mat-card-footer>
@@ -117,33 +117,10 @@
               </ol>
               <div class="scrollable-messages">
               <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action active">
-                    Insulin injected at 2pm.
+                <a href="#" id="logmessagesdiv" *ngFor="let message of logmessages" class="list-group-item list-group-item-action active">
+                    {{message}}
                 </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    Glucagon injected at 4pm.
-                </a>
-                <a href="#" class="list-group-item list-group-item-action disabled">
-                    Blood sugar level high at 2pm.
-                </a>
-                <a href="#" class="list-group-item list-group-item-action active">
-                    Insulin injected at 2pm.
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    Glucagon injected at 4pm.
-                </a>
-                <a href="#" class="list-group-item list-group-item-action disabled">
-                    Blood sugar level high at 2pm.
-                </a>
-                <a href="#" class="list-group-item list-group-item-action active">
-                Insulin injected at 2pm.
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    Glucagon injected at 4pm.
-                </a>
-                <a href="#" class="list-group-item list-group-item-action disabled">
-                    Blood sugar level high at 2pm.
-                </a>
+                                 
               </div>
             </div>
              </div>

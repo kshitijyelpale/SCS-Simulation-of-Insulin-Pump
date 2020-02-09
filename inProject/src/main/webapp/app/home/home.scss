@@ -186,6 +186,20 @@ left: 400px;
 background-color: #ff0057;
 }
 
+#logmessagesdiv:nth-child(2n){
+  color: #2c3e50;
+  background-color: #dadada;
+  border-color: #ffffff;
+}
+
+.bsl-card-low{
+  color: orange;
+}
+
+.bsl-card-high{
+  color: blue;
+}
+
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
   only screen and (-moz-min-device-pixel-ratio: 2),

@@ -32,7 +32,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   textualcurrentbsl: any;
   textualpreviousbsl: any;
   textualtime: Date;
-  logmessages: string[];
+  logmessages: Array<string> = [];
+  alertFlag = 0;
   //batterybar: any;
 
   datasets: any[] = [
@@ -83,24 +84,49 @@ export class HomeComponent implements OnInit, OnDestroy {
               homeObject.textualcurrentbsl = homeObject.bsl.currentBsl.toFixed(2);
               homeObject.textualpreviousbsl = homeObject.bsl.previousBsl.toFixed(2);
               homeObject.textualtime = new Date().toLocaleTimeString();
-              if(homeObject.bsl.currentBsl > 120 && homeObject.bsl.currentBsl < 130 &&  homeObject.bsl.alertCounterForHyperLevel == 4){
+              if(homeObject.bsl.currentBsl > 120){
+                $("#bslcard").addClass("bsl-card-high");
+              }
+
+              if(homeObject.bsl.currentBsl < 120 && homeObject.bsl.currentBsl > 70){
+                $("#bslcard").removeClass("bsl-card-low");
+                $("#bslcard").removeClass("bsl-card-high");
+              }
+
+              if(homeObject.bsl.currentBsl < 70){
+                $("#bslcard").addClass("bsl-card-low");
+              }
+                   
+              if(homeObject.bsl.currentBsl > 120 && homeObject.bsl.currentBsl < 130 &&  homeObject.alertFlag == 0){
                 alertMessage = "Insulin is getting injected. It's time to control your cravings :)"
                 homeObject.openSnackBar();
+                homeObject.alertFlag = 1;
               }
 
-              if(homeObject.bsl.currentBsl > 130 && homeObject.bsl.currentBsl < 140 &&  homeObject.bsl.alertCounterForHyperLevel == 3){
+              if(homeObject.bsl.currentBsl > 130 && homeObject.bsl.currentBsl < 140 &&  homeObject.alertFlag == 0){
                 alertMessage = "Insulin is getting injected. It's time for some exercise :)"
                 homeObject.openSnackBar();
+                homeObject.alertFlag = 1;
               }
 
-              if(homeObject.bsl.currentBsl > 140 && homeObject.bsl.currentBsl < 150 &&  homeObject.bsl.alertCounterForHyperLevel == 2){
+              if(homeObject.bsl.currentBsl > 140 && homeObject.bsl.currentBsl < 150 &&  homeObject.alertFlag == 0){
                 alertMessage = "Insulin is getting injected. Just Relax."
                 homeObject.openSnackBar();
+                homeObject.alertFlag = 1;
               }
 
-              if(homeObject.bsl.currentBsl < 70 && homeObject.bsl.currentBsl > 50){
+              if(homeObject.bsl.currentBsl < 70 && homeObject.bsl.currentBsl > 50 && homeObject.alertFlag == 0){
                 alertMessage = "Glucagon is getting injected. Just laydown and rest."
                 homeObject.openSnackBar();
+                homeObject.alertFlag = 1;
+              }
+
+              if(homeObject.bsl.currentBsl < 120 && homeObject.bsl.currentBsl > 70){
+                homeObject.alertFlag = 0;
+              }
+
+              if(homeObject.bsl.message != null){
+               homeObject.logmessages.unshift(homeObject.bsl.message); 
               }
 
               chart.data.datasets.forEach(function(dataset: any) {
@@ -255,6 +281,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       case '1':
         carbs = -30;
         break;
+      case '2':  
         carbs = 200;
         break;
       case '3':
@@ -302,7 +329,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     .attr('aria-valuenow', this.bsl.glucagonInReservoir * 10 + '%')
     .css('width', this.bsl.glucagonInReservoir * 10 + '%');
 
+   if(this.bsl.glucagonInReservoir<3){
+    alertMessage = "Glucagon reservoir is low. Please Refill."
+    homeObject.openSnackBar();
+   }
 
+   if(this.bsl.insulinInReservoir<3){
+    alertMessage = "Insulin reservoir is low. Please Refill."
+    homeObject.openSnackBar();
+  }
     //return this.bsl;
   }
 
