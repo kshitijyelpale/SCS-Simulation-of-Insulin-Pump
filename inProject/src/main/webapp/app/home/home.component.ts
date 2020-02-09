@@ -12,7 +12,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Bsl } from './bsl';
 import { SERVER_API_URL } from '../app.constants';
 import { map } from 'rxjs/operators';
-import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import * as $ from 'jquery';
 
 var homeObject;
@@ -29,6 +29,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   authSubscription?: Subscription;
   HeadersForBsl: any;
   public bsl: Bsl[];
+  textualcurrentbsl: any;
+  textualpreviousbsl: any;
+  textualtime: Date;
+  logmessages: string[];
   //batterybar: any;
 
   datasets: any[] = [
@@ -76,19 +80,26 @@ export class HomeComponent implements OnInit, OnDestroy {
               //     console.log('hello');
               // }, 2000);
               homeObject.getBsl();
+              homeObject.textualcurrentbsl = homeObject.bsl.currentBsl.toFixed(2);
+              homeObject.textualpreviousbsl = homeObject.bsl.previousBsl.toFixed(2);
+              homeObject.textualtime = new Date().toLocaleTimeString();
+              if(homeObject.bsl.currentBsl > 140){
+                alertMessage = "Insulin is getting injected. Seems like you consumed a high calorie food. It's time to control your cravings :)"
+                homeObject.openSnackBar();
+              }
 
               chart.data.datasets.forEach(function(dataset: any) {
                 dataset.data.push({
                   x: Date.now(),
 
-                  y: homeObject.bsl.currentBsl
+                  y: homeObject.bsl.currentBsl.toFixed(2)
                 });
               });
                  
-              if(homeObject.bsl.currentBsl > 120 && homeObject.bsl.currentBsl < 130){
+              // if(homeObject.bsl.currentBsl > 120 && homeObject.bsl.currentBsl < 130){
                
-                homeObject.openBottomSheet();
-              }
+              //   homeObject.openBottomSheet();
+              // }
               // chart.config.options.scales.yAxes[0].ticks.min = chart.helpers.niceNum(40);
               // chart.config.options.scales.yAxes[0].ticks.max = chart.helpers.niceNum(180);
             },
@@ -168,7 +179,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private loginModalService: LoginModalService,
     private authServer: AuthServerProvider,
-    private _bottomSheet: MatBottomSheet
+    private _snackBar: MatSnackBar
   ) {
     homeObject = this;
   }
@@ -324,9 +335,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 }
 
-openBottomSheet(): void {
-  this._bottomSheet.open(BottomSheetOverviewExampleSheetComponent);
+openSnackBar() {
+  this._snackBar.openFromComponent(AlertComponent, {
+    duration: 5000,
+  });
 }
+
 
   ngOnDestroy(): void {
     if (this.authSubscription) {
@@ -336,13 +350,16 @@ openBottomSheet(): void {
 }
 
 @Component({
-  selector: 'jhi-bottom-sheet-overview-example-sheet',
-  template:'<div><span mat-line>Google Keep</span><span mat-line>Add to a note</span></div> ',
+  selector: 'jhi-alert',
+  template:'<div><span mat-line>{{alertcomponentmessage}}</span></div> ',
   styleUrls: ['home.scss']
 })
-export class BottomSheetOverviewExampleSheetComponent {
-  constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheetComponent>) {}
+export class AlertComponent {
+ alertcomponentmessage: any;
 
+ constructor(){
+   this.alertcomponentmessage = alertMessage;
+ }
   // openLink(event: MouseEvent): void {
   //   this._bottomSheetRef.dismiss();
   //   event.preventDefault();

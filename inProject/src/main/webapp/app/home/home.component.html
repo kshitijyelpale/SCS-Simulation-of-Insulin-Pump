@@ -36,7 +36,7 @@
                     <div class="progress" style="width: 60%;">
                         <div id="batterybar" class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" style="width: 90%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
-                      <button type="button" (click)="openBottomSheet()" class="btn btn-primary battery-button">Recharge</button>
+                      <button type="button" (click)="openSnackBar()" class="btn btn-primary battery-button">Recharge</button>
                 </div>
                 <div class="form-group activity-dropdown">
                     <select class="custom-select" (change)="triggerCarbsChangeEvent($event.target.value)">
@@ -73,10 +73,10 @@
                           </mat-card-header>
                           <mat-card-content>
                               <div class="bsl-card-div">
-                                90
+                                {{textualcurrentbsl}}
                               </div>
                               <mat-card-footer>
-                                Time : 4:02:45 PM
+                                Time : {{textualtime}}
                             </mat-card-footer>
                           </mat-card-content>
                     </mat-card>
@@ -100,11 +100,11 @@
                         <tbody>
                             <tr class="table-danger">
                                 <th scope="row">Previous BSL level</th>
-                                <td>120 mg/dL</td>
+                                <td>{{textualpreviousbsl}} mg/dL</td>
                             </tr>
                             <tr class="table-danger">
                                 <th scope="row">Last Carbohydrate Intake</th>
-                                <td>120 grams</td>
+                                <td>{{bsl.carbohydrates}} grams</td>
                             </tr>
                         </tbody>
                     </table>
