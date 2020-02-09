@@ -83,8 +83,23 @@ export class HomeComponent implements OnInit, OnDestroy {
               homeObject.textualcurrentbsl = homeObject.bsl.currentBsl.toFixed(2);
               homeObject.textualpreviousbsl = homeObject.bsl.previousBsl.toFixed(2);
               homeObject.textualtime = new Date().toLocaleTimeString();
-              if(homeObject.bsl.currentBsl > 140){
-                alertMessage = "Insulin is getting injected. Seems like you consumed a high calorie food. It's time to control your cravings :)"
+              if(homeObject.bsl.currentBsl > 120 && homeObject.bsl.currentBsl < 130 &&  homeObject.bsl.alertCounterForHyperLevel == 4){
+                alertMessage = "Insulin is getting injected. It's time to control your cravings :)"
+                homeObject.openSnackBar();
+              }
+
+              if(homeObject.bsl.currentBsl > 130 && homeObject.bsl.currentBsl < 140 &&  homeObject.bsl.alertCounterForHyperLevel == 3){
+                alertMessage = "Insulin is getting injected. It's time for some exercise :)"
+                homeObject.openSnackBar();
+              }
+
+              if(homeObject.bsl.currentBsl > 140 && homeObject.bsl.currentBsl < 150 &&  homeObject.bsl.alertCounterForHyperLevel == 2){
+                alertMessage = "Insulin is getting injected. Just Relax."
+                homeObject.openSnackBar();
+              }
+
+              if(homeObject.bsl.currentBsl < 70 && homeObject.bsl.currentBsl > 50){
+                alertMessage = "Glucagon is getting injected. Just laydown and rest."
                 homeObject.openSnackBar();
               }
 
@@ -319,6 +334,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     //return this.bsl;
   }
 
+  rechargeBattery(): void{
+    $("#batterybar").removeClass("lowbattery");
+    $("#batterybar").width(100+"%");
+  }
+
   drainbattery() : any {
     
     setInterval(() => this.drainbatterytimer(),2000);
@@ -330,9 +350,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         if(w>25){
       $("#batterybar").width(w-2);
       
-      if(w<90){
+      if(w<60){
        
         $("#batterybar").addClass("lowbattery");
+        alertMessage = "Battery is low. Please Recharge it."
+        homeObject.openSnackBar();
       }
   }
 }
