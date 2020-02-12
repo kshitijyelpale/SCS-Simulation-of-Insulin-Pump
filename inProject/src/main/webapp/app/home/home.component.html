@@ -1,12 +1,36 @@
 <div class="row" [ngSwitch]="isAuthenticated()">
     <div class="col-md-3" *ngSwitchCase="false">
-        <span class="hipster img-fluid rounded">An insulin pump is a medical device used for the administration of insulin in the treatment of diabetes mellitus, also known as continuous subcutaneous insulin therapy. The device configuration may vary depending on design. A traditional pump includes:
-            the pump (including controls, processing module, and batteries), a disposable reservoir for insulin (inside the pump), a disposable infusion set, including a cannula for subcutaneous insertion (under the skin) and a tubing system to connect the insulin reservoir to the cannula.
-            More recent models may include disposable or semi-disposable designs for the pumping mechanism and may eliminate tubing from the infusion set.An insulin pump is an alternative to multiple daily injections of insulin by insulin syringes or an insulin pen and allows for flexible insulin therapy when used in conjunction with blood glucose monitoring and carbohydrate counting.
+        <span class="hipster img-fluid rounded"><pre style="overflow: hidden; margin-right: -10em; margin-left: -9em; margin-bottom: 0rem;">
+            1) Firstly let the INGLPump know who you are by clicking on 
+               the register button.
+
+            2) Fill in the necessary info. A mail will be sent to your 
+               email account with the registration link.
+               Click on it and confirm the registration.
+
+            3) Login into the INGLPump. Voila! now you can monitor your 
+               bsl level in real time.
+
+            4) For your convenience we have provided two views - 
+               Graphical and Textual to see the BSL level.
+
+            5) Info like last Carbs intake, previous and current bsl level 
+               can be seen in both the views.
+
+            6) In addition, at the top realtime status of battery and the 
+               levels of insulin and glucagon reservoirs can also be viewed.
+
+            7) Important actions taken by you and the INGLPump are displayed 
+               under log messages along with the timestamp at the bottom 
+               right hand side.
+
+            8) INGLPump also generates pop up alerts before any important 
+               action is to be taken or to notify you to do a certain thing.     
+        </pre>
         </span>
     </div>
     <div class="col-md-9">
-        <h1 class="display-4 hometitle" jhiTranslate="home.title"  *ngSwitchCase="false">Insulin Glucagon Pump</h1>
+        <h1 class="display-4 hometitle" jhiTranslate="home.title"  *ngSwitchCase="false">How to use INGLPump</h1>
         <!-- <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p> -->
 
         <div [ngSwitch]="isAuthenticated()">

@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           realtime: {
             duration: 25000,
             ttl: 60000,
-            refresh: 1000,
+            refresh: 3000,
             delay: 1000,
             pause: false,
             onRefresh(chart: any) {
