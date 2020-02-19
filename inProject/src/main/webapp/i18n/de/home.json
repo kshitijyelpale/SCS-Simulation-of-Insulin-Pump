@@ -1,11 +1,11 @@
 {
   "home": {
-    "title": "Willkommen, Java Hipster!",
-    "subtitle": "Dies ist Ihre Hauptseite",
+    "title": "INGLPump",
+    "subtitle": "Wie benutzt man INGLPump",
     "logged": {
       "message": "Sie sind als Benutzer \"{{username}}\" angemeldet."
     },
-    "question": "Wenn Sie Fragen zu JHipster haben:",
+    "question": "Wenn Sie Fragen zu INGLPump haben:",
     "link": {
       "homepage": "JHipster Hauptseite",
       "stackoverflow": "JHipster auf Stack Overflow",
@@ -14,6 +14,7 @@
       "follow": "kontaktieren Sie uns mit @jhipster auf Twitter"
     },
     "like": "Wenn Sie JHipster mögen, vergessen Sie nicht uns einen Stern zu geben auf",
-    "github": "GitHub"
+    "github": "GitHub",
+    "manual": "1) Lassen Sie zuerst die INGL-Pumpe wissen, wer Sie sind, indem\n Sie auf die Registrierungsschaltfläche klicken. \n\n2) Geben Sie die erforderlichen Informationen ein. Eine E-Mail \nwird mit dem Registrierungslink an Ihr email-Konto gesendet. \nKlicken Sie darauf und bestätigen Sie die Registrierung. \n\n3) Melden Sie sich bei der INGLPump an. Voila! Jetzt können Sie \nIhren bsl-Pegel in Echtzeit überwachen. \n\n4) Zur Vereinfachung haben wir zwei Ansichten bereitgestellt - \n Grafisch und Text, um die BSL-Ebene anzuzeigen. \n\n5) Informationen wie die letzte Kohlenhydrataufnahme, der \nvorherige und der aktuelle BSL-Wert können in beiden Ansichten \nangezeigt werden. \n\n6) Außerdem können oben der Echtzeitstatus der Batterie und die \nNiveaus der Insulin- und Glucagonspeicher angezeigt werden. \n\n7) Wichtige Aktionen, die Sie und die INGLPump ausgeführt haben,\n werden unter den Protokollmeldungen zusammen mit dem Zeitstempel \nunten rechts angezeigt. \n\n8) INGLPump generiert auch Popup-Warnungen, bevor eine wichtige \nAktion ausgeführt oder Sie benachrichtigt werden, um eine \nbestimmte Aktion auszuführen."
   }
 }
