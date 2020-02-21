@@ -47,7 +47,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/inglpump?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
-    password: password
+    password:
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -70,18 +70,18 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
   mail:
-     host: smtp.gmail.com
-     port: 587
-     # The gmail account from which the email is sent to user
-     username: insulinglucagonpump2020@gmail.com
-     # password for the above account
-     password: insulinglucagon
-     protocol: smtp
-     tls: true
-     properties.mail.smtp:
-            auth: true
-            starttls.enable: true
-            ssl.trust: smtp.gmail.com
+    host: smtp.gmail.com
+    port: 587
+    # The gmail account from which the email is sent to user
+    username: insulinglucagonpump2020@gmail.com
+    # password for the above account
+    password: insulinglucagon
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:

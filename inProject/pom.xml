@@ -656,7 +656,7 @@
                         <url>jdbc:mysql://localhost:3306/inglpump</url>
                         <defaultSchemaName>inglpump</defaultSchemaName>
                         <username>root</username>
-                        <password>password</password>
+                        <password></password>
                         <referenceUrl>hibernate:spring:com.inglpump.domain?dialect=org.hibernate.dialect.MySQL8Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                         <verbose>true</verbose>
                         <logging>debug</logging>
