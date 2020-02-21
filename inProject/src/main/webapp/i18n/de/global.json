@@ -54,7 +54,8 @@
         },
         "register": {
           "noaccount": "Sie haben noch keinen Zugang?",
-          "link": "Registrieren Sie sich"
+          "link": "Registrieren Sie sich",
+          "signin": "Bitte klicken Sie auf den Link, um sich anzumelden:"
         }
       },
       "error": {

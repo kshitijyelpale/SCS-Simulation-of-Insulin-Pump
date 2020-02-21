@@ -110,7 +110,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               }
 
               if (homeObject.bsl.currentBsl > 140 && homeObject.bsl.currentBsl < 150 && homeObject.alertFlag == 0) {
-                alertMessage = 'Insulin is getting injected. Just Relax.';
+                alertMessage = 'Insulin is getting injected. Just lay down and relax.';
                 homeObject.openSnackBar();
                 homeObject.alertFlag = 1;
               }

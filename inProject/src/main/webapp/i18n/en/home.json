@@ -1,11 +1,11 @@
 {
   "home": {
-    "title": "How to use INGLPump",
-    "subtitle": "This is your homepage",
+    "title": "INGLPump",
+    "subtitle": "How to use INGLPump",
     "logged": {
       "message": "You are logged in as user \"{{username}}\"."
     },
-    "question": "If you have any question on JHipster:",
+    "question": "If you have any question on INGLPump:",
     "link": {
       "homepage": "JHipster homepage",
       "stackoverflow": "JHipster on Stack Overflow",
@@ -14,6 +14,8 @@
       "follow": "follow @jhipster on Twitter"
     },
     "like": "If you like JHipster, don't forget to give us a star on",
-    "github": "GitHub"
+    "github": "GitHub",
+    "manual": "1) Firstly let the INGLPump know who you are by clicking on\nthe register button.\n\n2) Fill in the necessary info. A mail will be sent to your\nemail account with the registration link.\nClick on it and confirm the registration.\n\n3) Login into the INGLPump. Voila! now you can monitor your\nbsl level in real time.\n\n4) For your convenience we have provided two views - \n Graphical and Textual to see the BSL level.\n\n5) Info like last Carbs intake, previous and current bsl level \ncan be seen in both the views.\n\n6) In addition, at the top realtime status of battery and the \nlevels of insulin and glucagon reservoirs can also be viewed.\n\n7) Important actions taken by you and the INGLPump are displayed \nunder log messages along with the timestamp at the bottom\nright hand side.\n\n8) INGLPump also generates pop up alerts before any important \naction is to be taken or to notify you to do a certain thing."
+              
   }
 }

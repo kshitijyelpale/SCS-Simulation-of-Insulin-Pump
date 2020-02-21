@@ -1,6 +1,6 @@
 <div class="row" [ngSwitch]="isAuthenticated()">
     <div class="col-md-3" *ngSwitchCase="false">
-        <span class="hipster img-fluid rounded"><pre style="overflow: hidden; margin-right: -10em; margin-left: -9em; margin-bottom: 0rem;">
+        <span class="hipster img-fluid rounded"><pre jhiTranslate="home.manual" style="padding-left: 6em; overflow: hidden; margin-right: -10em; margin-left: -9em; margin-bottom: 0rem;">
             1) Firstly let the INGLPump know who you are by clicking on 
                the register button.
 
@@ -30,7 +30,7 @@
         </span>
     </div>
     <div class="col-md-9">
-        <h1 class="display-4 hometitle" jhiTranslate="home.title"  *ngSwitchCase="false">How to use INGLPump</h1>
+        <h1 class="display-4 hometitle" jhiTranslate="home.subtitle"  *ngSwitchCase="false">How to use INGLPump</h1>
         <!-- <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p> -->
 
         <div [ngSwitch]="isAuthenticated()">
