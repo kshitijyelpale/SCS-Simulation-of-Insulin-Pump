@@ -2,7 +2,7 @@
 
 Sources code is in 'inProject' directory
 
-Project's final documentation report will be uploaded soon. 
+Project's final documentation report is in Documentation folder named "SCS Project Report - Group E.pdf". 
 
 Project scope:
 
