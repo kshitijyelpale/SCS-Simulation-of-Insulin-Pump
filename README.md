@@ -1,3 +1,14 @@
+Project Team Members: 
+Yelpale Kshitij(1322509) 
+Girdhar Shubham(1323003) 
+Shaikh Saﬁr Mohammad(1322554) 
+Usmani Faiz(13231977) 
+Ahmed Asad(1321474)
+
+Frankfurt University of Applied sciences, Master's Course: High Integrity Systems, Subject: SAFETY CRITICAL SYSTEMS (SCS) 
+
+
+
 'inglpump-0.0.1-SNAPSHOT.jar' is the project for checking out, just need to make sure mysql 5.6 or above should be running with username 'root' and no password(empty) 
 
 Sources code is in 'inProject' directory
