@@ -31,7 +31,7 @@
     "chartjs-plugin-annotation": "^0.5.7",
     "chartjs-plugin-streaming": "1.8.0",
     "core-js": "3.5.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "moment": "2.24.0",
     "ng-jhipster": "0.11.5",
     "ng2-charts": "2.3.0",
