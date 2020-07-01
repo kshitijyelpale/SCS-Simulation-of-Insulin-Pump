@@ -1,9 +1,9 @@
 Project Team Members: 
-Yelpale Kshitij(1322509) 
-Girdhar Shubham(1323003) 
-Shaikh Saﬁr Mohammad(1322554) 
-Usmani Faiz(13231977) 
-Ahmed Asad(1321474)
+Kshitij Yelpale (1322509), 
+Shubham Girdhar (1323003), 
+Saﬁr Mohammad Shaikh (1322554), 
+Faiz Usmani(13231977), 
+Asad Ahmed (1321474)
 
 Frankfurt University of Applied sciences, Master's Course: High Integrity Systems, Subject: SAFETY CRITICAL SYSTEMS (SCS) 
 
