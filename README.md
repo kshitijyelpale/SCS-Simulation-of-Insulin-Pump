@@ -1,7 +1,7 @@
 # Software Simulation of an Insulin and Glucagon Pump
 
 ## Project Details:
-This project was carried out under a module, Safety Critical Systems, in the Master's Course, High Integrity Systems at Frankfurt University of Applied Sciences. Please find the project report [here.](Documentation/SCS Project Report - Group E.pdf)
+This project was carried out under a module, Safety Critical Systems, in the Master's Course, High Integrity Systems at Frankfurt University of Applied Sciences. Please find the project report [here.](Documentation/SCS%20Project%20Report%20-%20Group%20E.pdf)
 
 ## Project Team Members: 
 Saﬁr Mohammad Shaikh, Kshitij Yelpale, Faiz Usmani, Shubham Girdhar, Asad Ahmed
