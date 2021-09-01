@@ -8,17 +8,17 @@ Saﬁr Mohammad Shaikh, Kshitij Yelpale, Faiz Usmani, Shubham Girdhar, Asad Ahme
 
 ## Technologies Used:
 * Language: JavaScript
-* FrontEnd: Angular JS, HTML5, CSS3, JQUERY
-* BackEnd: Spring Boot
 * Middleware Framework: JHipster
+* FrontEnd: Angular, HTML5, CSS3
+* BackEnd: Spring Boot
 * Documentation: Latex
 
 ## How to Run?
 1. Clone the Repository:
 ```sh
-git clone https://github.com/Safir-Mohammad-Mustak-Shaikh/Custody-Transfer-using-Hyperledger-Fabric.git
+https://github.com/kshitijyelpale/SCS-Simulation-of-Insulin-Pump.git
 ```
-2. Import the project in Eclipse (using pom.xml)
+2. Import the project in any IDE IntelliJ/Eclipse (using pom.xml)
 
 3. Open the Terminal (Current Project Path) and run:
 ```sh
